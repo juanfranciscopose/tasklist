@@ -7,6 +7,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -35,22 +36,22 @@ public class Task {
 	@Column(name="status", nullable = false)
 	private boolean status;//public-> true, private-> false?
 	
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = false, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
 	@JoinColumn(name="author")
 	private User author;
 
-	@OneToMany(mappedBy = "task", cascade = {CascadeType.PERSIST, CascadeType.MERGE ,CascadeType.REMOVE}, orphanRemoval = true)
+	@OneToMany(mappedBy = "task", orphanRemoval = true, fetch = FetchType.EAGER)
 	private List<ToDo> toDoList ;
 	
 	public Task() {}
 	
-	public Task(long id, String title, String description, Date timeStamp, boolean status, User author) {
-		this.id = id;
+	//create task
+	public Task(String title, String description, Date timeStamp, boolean status) {
 		this.title = title;
 		this.description = description;
 		this.timeStamp = timeStamp;
 		this.status = status;
-		this.author = author;
+		this.author = null;
 		this.toDoList = new ArrayList<>();
 	}
 
@@ -129,10 +130,7 @@ public class Task {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((description == null) ? 0 : description.hashCode());
 		result = prime * result + (int) (id ^ (id >>> 32));
-		result = prime * result + (status ? 1231 : 1237);
-		result = prime * result + ((title == null) ? 0 : title.hashCode());
 		return result;
 	}
 
@@ -145,21 +143,15 @@ public class Task {
 		if (getClass() != obj.getClass())
 			return false;
 		Task other = (Task) obj;
-		if (description == null) {
-			if (other.description != null)
-				return false;
-		} else if (!description.equals(other.description))
-			return false;
 		if (id != other.id)
 			return false;
-		if (status != other.status)
-			return false;
-		if (title == null) {
-			if (other.title != null)
-				return false;
-		} else if (!title.equals(other.title))
-			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Task [id=" + id + ", title=" + title + ", description=" + description + ", timeStamp=" + timeStamp
+				+ ", status=" + status + ", toDoList=" + toDoList + "]";
 	}
 
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -36,13 +37,12 @@ public class User {
 	@Column(name="telephone", length = 20)
 	private long telephone;
 	
-	@OneToMany(mappedBy = "author", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true)
+	@OneToMany(mappedBy = "author", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.EAGER)
 	private List<Task> tasks;
 	
 	public User() {}
 
-	public User(long id, String name, String surname, String email, String password, long telephone) {
-		this.id = id;
+	public User(String name, String surname, String email, String password, long telephone) {
 		this.name = name;
 		this.surname = surname;
 		this.email = email;
@@ -106,20 +106,14 @@ public class User {
 		this.tasks = tasks;
 	}
 	
-	public boolean addTask(Task task) {
-		if (!this.tasks.contains(task)) {
-			this.tasks.add(task);
-			return true;
-		}
-		return false;
+	public void addTask(Task task) {
+		this.tasks.add(task);
+		task.setAuthor(this);
 	}
 	
-	public boolean removeTask(Task task) {
-		if (this.tasks.contains(task)) {
-			this.tasks.remove(task);
-			return true;
-		}
-		return false;
+	public void removeTask(Task task) {
+		this.tasks.remove(task);
+		task.setAuthor(null);
 	}
 
 	@Override
@@ -127,7 +121,6 @@ public class User {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		result = prime * result + (int) (id ^ (id >>> 32));
 		return result;
 	}
 
@@ -145,9 +138,13 @@ public class User {
 				return false;
 		} else if (!email.equals(other.email))
 			return false;
-		if (id != other.id)
-			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", name=" + name + ", surname=" + surname + ", email=" + email + ", password="
+				+ password + ", telephone=" + telephone + ", tasks=" + tasks + "]";
 	}
 	
 }
