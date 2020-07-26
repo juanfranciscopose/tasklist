@@ -27,7 +27,7 @@ public class ToDo {
 	@Column(name = "time_stamp", nullable = false)
 	private Date timeStamp;
 	
-	@ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+	@ManyToOne(optional = false, fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinColumn(name="task")
 	private Task task;
 		
@@ -36,11 +36,10 @@ public class ToDo {
 	
 	public ToDo() {}
 	
-	public ToDo(long id, String description, Date timeStamp, Task task) {
-		this.id = id;
+	public ToDo(String description, Date timeStamp) {
 		this.description = description;
 		this.timeStamp = timeStamp;
-		this.task = task;
+		this.task = null;
 		this.status = false;
 	}
 
@@ -83,14 +82,32 @@ public class ToDo {
 	public void setStatus(boolean status) {
 		this.status = status;
 	}
-	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (id ^ (id >>> 32));
+		return result;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj) return true;
-	    if (obj == null || getClass() != obj.getClass()) return false;
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ToDo other = (ToDo) obj;
+		if (id != other.id)
+			return false;
+		return true;
+	}
 
-	    ToDo t = (ToDo) obj;
-
-	    return getDescription() == t.getDescription();
+	@Override
+	public String toString() {
+		return "ToDo [id=" + id + ", description=" + description + ", timeStamp=" + timeStamp + ", status=" + status
+				+ "]";
 	}
 }

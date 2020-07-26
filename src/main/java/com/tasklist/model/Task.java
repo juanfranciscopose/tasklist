@@ -40,7 +40,7 @@ public class Task {
 	@JoinColumn(name="author")
 	private User author;
 
-	@OneToMany(mappedBy = "task", orphanRemoval = true, fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "task", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.EAGER)
 	private List<ToDo> toDoList ;
 	
 	public Task() {}
@@ -110,20 +110,14 @@ public class Task {
 	public void setAuthor(User author) {
 		this.author = author;
 	}
-	public boolean addToDo(ToDo toDo) {
-		if (!this.toDoList.contains(toDo)) {
-			this.toDoList.add(toDo);
-			return true;
-		}
-		return false;
+	public void addToDo(ToDo toDo) {
+		this.toDoList.add(toDo);
+		toDo.setTask(this);
 	}
 	
-	public boolean removeToDo(ToDo toDo) {
-		if (this.toDoList.contains(toDo)) {
-			this.toDoList.remove(toDo);
-			return true;
-		}
-		return false;
+	public void removeToDo(ToDo toDo) {
+		this.toDoList.remove(toDo);
+		toDo.setTask(null);
 	}
 
 	@Override

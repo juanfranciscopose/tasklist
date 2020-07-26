@@ -44,8 +44,8 @@ class TaskRepositoryTest {
 	
 	@AfterEach
 	public void after() {
-		userRepository.delete(user1);
-		userRepository.delete(user2);
+		userRepository.delete(userRepository.findByEmail(user1.getEmail()));
+		userRepository.delete(userRepository.findByEmail(user2.getEmail()));
 	}
 	
 	@Test
@@ -110,7 +110,6 @@ class TaskRepositoryTest {
 		assertEquals(1, user2.getTasks().size());
 		listStatusTrue = taskRepository.findByStatus(true);
 		assertEquals(1, listStatusTrue.size());
-		
 	}
 	
 }

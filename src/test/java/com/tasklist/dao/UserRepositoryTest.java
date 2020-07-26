@@ -28,7 +28,7 @@ class UserRepositoryTest {
 	
 	@AfterEach
 	public void after() {
-		userRepository.delete(user);
+		userRepository.delete(userRepository.findByEmail(user.getEmail()));
 	}
 	@Test
 	void findByEmailTest() {
