@@ -38,6 +38,7 @@ class TaskRepositoryTest {
 		user1.addTask(task1);
 		task2 = new Task("Spring boot practice", "class 1", new Date(), false);
 		user2.addTask(task2);
+		
 		userRepository.save(user1);
 		userRepository.save(user2);
 	}
@@ -110,6 +111,7 @@ class TaskRepositoryTest {
 		assertEquals(1, user2.getTasks().size());
 		listStatusTrue = taskRepository.findByStatus(true);
 		assertEquals(1, listStatusTrue.size());
+		
 	}
 	
 }
