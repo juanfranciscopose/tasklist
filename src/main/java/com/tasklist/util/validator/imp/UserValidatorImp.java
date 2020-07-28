@@ -1,6 +1,7 @@
 package com.tasklist.util.validator.imp;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.tasklist.dao.UserRepository;
 import com.tasklist.dto.UserRequest;
@@ -9,6 +10,7 @@ import com.tasklist.util.exception.NotFoundException;
 import com.tasklist.util.exception.UnprocessableEntityException;
 import com.tasklist.util.validator.UserValidator;
 
+@Service
 public class UserValidatorImp implements UserValidator{
 	
 	@Autowired
