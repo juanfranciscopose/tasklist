@@ -51,8 +51,28 @@ public class UserValidatorImp implements UserValidator{
 		if(userRequest.getSurname().length() < 3 ) {
 			throw new UnprocessableEntityException("the surname is very short. Min 3 characters");
 		}
-				
-		//is email?
+		if(userRequest.getPassword().length() < 3 ) {
+			throw new UnprocessableEntityException("the password is very short. Min 3 characters");
+		}
+		if(userRequest.getEmail().length() < 3 ) {
+			throw new UnprocessableEntityException("the email is very short");
+		}
+		
+		//max fields
+		if(userRequest.getName().length() > 150 ) {
+			throw new UnprocessableEntityException("the name is long. Max 150 characters");
+		}
+		if(userRequest.getSurname().length() > 200 ) {
+			throw new UnprocessableEntityException("the surname is very long. Max 200 characters");
+		}
+		if(userRequest.getPassword().length() > 8 ) {
+			throw new UnprocessableEntityException("the password is very long. Max 8 characters");
+		}
+		if(userRequest.getEmail().length() > 100 ) {
+			throw new UnprocessableEntityException("the email is very long. Max 100 characters");
+		}
+		
+		//email is correct?
 		if(!userRequest.getEmail().contains("@")) {
 			throw new UnprocessableEntityException("the email is wrong");
 		}

@@ -19,24 +19,34 @@ class UserServiceTest {
 	
 	@Test
 	void storeUserTest() {
-		//exceptions testing
-		userRequest.setEmail("this email must exceed 100 characters to generate the error. This email must exceed 100 characters to generate the error.");
+		//---- EXCEPTION TESTING ----
+		
+		//--name
+		//151 characters
+		userRequest.setName("Lorem ipsum dolor sit amet consectetur adipiscing elit lacus iaculis, pretium tempus volutpat nec dignissim et hendrerit praesent. Metus ultricies vo..");
+		assertThrows(InternalServerErrorException.class, () -> userService.storeUser(userRequest));
+				
+		//--surname
+		userRequest.setName("Jhon");
+		//201 characters
+		userRequest.setSurname("Lorem ipsum dolor sit amet consectetur adipiscing elit luctus at euismod tristique, metus nisi urna.Lorem ipsum dolor sit amet consectetur adipiscing elit luctus at euismod tristique, metus nisi urna..");
+		assertThrows(InternalServerErrorException.class, () -> userService.storeUser(userRequest));
+				
+		//--password
+		userRequest.setSurname("Doe");
+		//9 characters
+		userRequest.setPassword("123456789");
+		assertThrows(InternalServerErrorException.class, () -> userService.storeUser(userRequest));
+
+		//--email
+		userRequest.setPassword("asd");
+		//101 characters
+		userRequest.setEmail("Lorem ipsum dolor sit amet consectetur adipiscing elit luctus at euismod tristique, metus nisi urna..");
 		assertThrows(InternalServerErrorException.class, () -> userService.storeUser(userRequest));
 		
 		userRequest.setEmail("jhondoe@gmail.com");
-		userRequest.setName("Name must exceed 150 characters to generate the error. Name must exceed 150 characters to generate the error. Name must exceed 150 characters to generate the error. Name must exceed 150 characters to generate the error.");
-		assertThrows(InternalServerErrorException.class, () -> userService.storeUser(userRequest));
-		
-		userRequest.setName("Jhon");
-		userRequest.setSurname("Surname must exceed 200 characters to generate the error. Surname must exceed 200 characters to generate the error. Surname must exceed 200 characters to generate the error. Surname must exceed 200 characters to generate the error. Surname must exceed 200 characters to generate the error.");
-		assertThrows(InternalServerErrorException.class, () -> userService.storeUser(userRequest));
-		
-		userRequest.setSurname("Doe");
-		userRequest.setPassword("123456789");
-		assertThrows(InternalServerErrorException.class, () -> userService.storeUser(userRequest));
 		
 		//right way
-		//userRequest.setPassword("asd");
 		//assertDoesNotThrow(() -> userService.storeUser(userRequest));
 		
 	}
