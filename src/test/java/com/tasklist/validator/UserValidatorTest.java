@@ -2,25 +2,65 @@ package com.tasklist.validator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.tasklist.dao.UserRepository;
 import com.tasklist.dto.UserRequest;
+import com.tasklist.model.User;
+import com.tasklist.util.exception.BadRequestException;
+import com.tasklist.util.exception.NotFoundException;
 import com.tasklist.util.exception.UnprocessableEntityException;
 import com.tasklist.util.validator.UserValidator;
 
 @SpringBootTest
 class UserValidatorTest {
 	
-	private UserRequest userRequest = new UserRequest(0, "Jhon", "Doe", "jhondoe@gmail.com", "asd", 12345);
+	private static final long HASH_RANDOM = 10000;//used to generate a non-existent id
+
+	
+	private UserRequest userRequest;
 	
 	@Autowired
 	private UserValidator userValidator;
 	
+	@Autowired
+	private UserRepository userRepository;
+	
+	@BeforeEach
+	void afterEach() {
+		userRequest = new UserRequest(0, "Jhon", "Doe", "jhondoe@gmail.com", "asd", 12345);
+		User user = new User("Mat", "Dixon", "matdixon@gmail.com", "asd", 67898);
+		userRepository.save(user);
+	}
+	
+	@AfterEach
+	void beforeEach() {
+		User user = userRepository.findByEmail("matdixon@gmail.com");
+		userRepository.delete(user);
+	}
+	
+	@Test
+	void deleteUserTest() {
+		//id = 0
+		assertThrows(BadRequestException.class, () -> userValidator.removeValidator(0));
+		//id incorrect -> non-existent
+		long id = userRepository.count() + HASH_RANDOM;
+		assertThrows(NotFoundException.class, () -> userValidator.removeValidator(id));
+		
+		//right way
+		User user = new User("Dan", "Carter", "dancarter@gmail.com", "asd", 67898);
+		userRepository.save(user);
+		long removeId = userRepository.findByEmail("dancarter@gmail.com").getId();
+		assertDoesNotThrow(()-> userValidator.removeValidator(removeId));
+		userRepository.delete(user);
+	}
+	
 	@Test
 	void createUserValidatorTest() {
-		//---- EXCEPTION TESTING ----
 		//--MIN FIELDS
 		//name
 		//2 characters
@@ -129,7 +169,6 @@ class UserValidatorTest {
 		//100 characters and contains "@"
 		userRequest.setEmail("Lorem ipsum dolor sit amet@consectetur adipiscing elit luctus at euismod tristique, metus nisi urna.");
 		assertDoesNotThrow(() -> userValidator.createValidator(userRequest));
-		userRequest.setEmail("jhondoe@gmail.com");
 		
 		//--EMAIL IS CORRECT? -> if contains '@'
 		//without '@'
@@ -139,6 +178,13 @@ class UserValidatorTest {
 		userRequest.setEmail("jhondoe@gmail.com");
 		assertDoesNotThrow(() -> userValidator.createValidator(userRequest));
 		
+		//--EMAIL EXIST?
+		//yes
+		userRequest.setEmail("matdixon@gmail.com");
+		assertThrows(UnprocessableEntityException.class, () -> userValidator.createValidator(userRequest));
+		//no
+		userRequest.setEmail("jhondoe@gmail.com");
+		assertDoesNotThrow(() -> userValidator.createValidator(userRequest));
 	}
 
 }

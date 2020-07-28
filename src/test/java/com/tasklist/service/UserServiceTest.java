@@ -2,11 +2,15 @@ package com.tasklist.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.tasklist.dao.UserRepository;
 import com.tasklist.dto.UserRequest;
+import com.tasklist.model.User;
 import com.tasklist.util.exception.InternalServerErrorException;
 
 @SpringBootTest
@@ -15,10 +19,25 @@ class UserServiceTest {
 	@Autowired
 	private UserService userService;
 	 
-	private UserRequest userRequest = new UserRequest(0, "Jhon", "Doe", "jhondoe@gmail.com", "asd", 12345);
+	private UserRequest userRequest;
 	
+	@Autowired
+	private UserRepository userRepository;
+	
+	@BeforeEach
+	void afterEach() {
+		userRequest = new UserRequest(0, "Jhon", "Doe", "jhondoe@gmail.com", "asd", 12345);
+		User user = new User("Mat", "Dixon", "matdixon@gmail.com", "asd", 67898);
+		userRepository.save(user);
+	}
+	
+	@AfterEach
+	void beforeEach() {
+		User user = userRepository.findByEmail("matdixon@gmail.com");
+		userRepository.delete(user);
+	}
 	@Test
-	void storeUserTest() {
+	void storeAndDeleteUserTest() {
 		//---- EXCEPTION TESTING ----
 		
 		//--name
@@ -44,11 +63,17 @@ class UserServiceTest {
 		userRequest.setEmail("Lorem ipsum dolor sit amet consectetur adipiscing elit luctus at euismod tristique, metus nisi urna..");
 		assertThrows(InternalServerErrorException.class, () -> userService.storeUser(userRequest));
 		
-		userRequest.setEmail("jhondoe@gmail.com");
+		//not unique email
+		userRequest.setEmail("matdixon@gmail.com");
+		assertThrows(InternalServerErrorException.class, () -> userService.storeUser(userRequest));
 		
 		//right way
-		//assertDoesNotThrow(() -> userService.storeUser(userRequest));
+		userRequest.setEmail("jhondoe@gmail.com");
+		assertDoesNotThrow(() -> userService.storeUser(userRequest));
 		
+		//delete
+		User user = userRepository.findByEmail("jhondoe@gmail.com");
+		assertDoesNotThrow(() -> userService.deleteUser(user.getId()));
 	}
 
 }

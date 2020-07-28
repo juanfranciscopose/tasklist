@@ -16,16 +16,36 @@ public class UserValidatorImp implements UserValidator{
 	@Autowired
 	private UserRepository userRepository;
 
+	private void idValidator(long id) throws BadRequestException, NotFoundException {
+		if(id == 0) {
+			throw new BadRequestException("id can't be 0");
+		}
+		if(!isUserExist(id)) {
+			throw new NotFoundException("user with id "+id+" not exist");	
+		}
+	}
+	
+	@Override
+	public boolean isUserExist(String email) {
+		return userRepository.existsByEmail(email);
+	}
+
+	@Override
+	public boolean isUserExist(long id) {
+		if(id == 0) {
+			return false;
+		}
+		return userRepository.existsById(id);
+	}
+	
 	@Override
 	public void getAllUserTaskValidator(long id) throws BadRequestException, NotFoundException {
-		// TODO Auto-generated method stub
-		
+		this.idValidator(id);
 	}
 
 	@Override
 	public void removeValidator(long id) throws BadRequestException, NotFoundException {
-		// TODO Auto-generated method stub
-		
+		this.idValidator(id);		
 	}
 
 	@Override
@@ -81,17 +101,6 @@ public class UserValidatorImp implements UserValidator{
 		if (this.isUserExist(userRequest.getEmail())) {
 			throw new UnprocessableEntityException("this email is being used");
 		}
-	}
-
-	@Override
-	public boolean isUserExist(String email) {
-		return userRepository.existsByEmail(email);
-	}
-
-	@Override
-	public boolean isUserExist(long id) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 }
