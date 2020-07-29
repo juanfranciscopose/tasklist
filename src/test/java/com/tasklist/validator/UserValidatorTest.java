@@ -21,7 +21,6 @@ class UserValidatorTest {
 	
 	private static final long HASH_RANDOM = 10000;//used to generate a non-existent id
 
-	
 	private UserRequest userRequest;
 	
 	@Autowired

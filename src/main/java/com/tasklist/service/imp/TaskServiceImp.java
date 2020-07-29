@@ -76,14 +76,14 @@ public class TaskServiceImp implements TaskService {
 
 	@Override
 	//refactor-> no need to search task
-	public void deleteTask(TaskRequest taskRequest) throws InternalServerErrorException, NotFoundException {
+	public void deleteTask(long id) throws InternalServerErrorException, NotFoundException {
 		try {
-			User user = userRepository.findById(taskRequest.getAuthor().getId()).get();
-			Task task = this.getTaskById(taskRequest.getId());
+			Task task = this.getTaskById(id);
+			User user = userRepository.findById(task.getAuthor().getId()).get();
 			user.removeTask(task);
 			userRepository.save(user);
 		} catch (NoSuchElementException  e) {
-			throw new NotFoundException("user with id '"+taskRequest.getId()+"' not exist"); 
+			throw new NotFoundException("user with id '"+id+"' not exist"); 
 		} catch (Exception e) {
 			throw new InternalServerErrorException(e.toString());
 		}

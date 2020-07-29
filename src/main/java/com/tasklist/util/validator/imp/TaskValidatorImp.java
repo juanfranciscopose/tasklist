@@ -20,10 +20,18 @@ public class TaskValidatorImp implements TaskValidator{
 	@Autowired
 	private TaskRepository taskRepository;
 	
+	private void idValidator(long id) throws BadRequestException, NotFoundException {
+		if(id == 0) {
+			throw new BadRequestException("id can't be 0");
+		}
+		if(!isTaskExist(id)) {
+			throw new NotFoundException("user with id "+id+" not exist");	
+		}
+	}
+	
 	@Override
 	public void deleteValidator(long id) throws BadRequestException, NotFoundException {
-		// TODO Auto-generated method stub
-		
+		this.idValidator(id);		
 	}
 
 	@Override
@@ -58,8 +66,10 @@ public class TaskValidatorImp implements TaskValidator{
 
 	@Override
 	public boolean isTaskExist(long id) {
-		// TODO Auto-generated method stub
-		return false;
+		if(id == 0) {
+			return false;
+		}
+		return taskRepository.existsById(id);
 	}
 
 	@Override

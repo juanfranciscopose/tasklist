@@ -67,7 +67,8 @@ class UserServiceTest {
 		userRequest.setEmail("matdixon@gmail.com");
 		assertThrows(InternalServerErrorException.class, () -> userService.storeUser(userRequest));
 		
-		//right way
+		//---RIGHT WAY
+		//create
 		userRequest.setEmail("jhondoe@gmail.com");
 		assertDoesNotThrow(() -> userService.storeUser(userRequest));
 		

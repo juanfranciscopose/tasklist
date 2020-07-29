@@ -16,7 +16,7 @@ public interface TaskService {
 	//if task exist return it
 	public Task getTaskById(long id) throws NotFoundException, InternalServerErrorException;
 	//Remove task from database
-	public void deleteTask(TaskRequest taskRequest) throws InternalServerErrorException, NotFoundException;
+	public void deleteTask(long id) throws InternalServerErrorException, NotFoundException;
 	//edit the passed task as parameter
 	public void updateTask(TaskRequest taskRequest) throws InternalServerErrorException;
 	//return list of 'to do' object

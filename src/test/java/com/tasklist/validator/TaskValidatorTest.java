@@ -10,28 +10,37 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.tasklist.dao.TaskRepository;
 import com.tasklist.dao.UserRepository;
 import com.tasklist.dto.TaskRequest;
 import com.tasklist.dto.UserRequest;
 import com.tasklist.model.User;
+import com.tasklist.util.exception.BadRequestException;
+import com.tasklist.util.exception.NotFoundException;
 import com.tasklist.util.exception.UnprocessableEntityException;
 import com.tasklist.util.validator.TaskValidator;
 
 @SpringBootTest
 class TaskValidatorTest {
 	
+	private static final long HASH_RANDOM = 10000;//used to generate a non-existent id
+	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private TaskRepository taskRepository;
 	
 	@Autowired
 	private TaskValidator taskValidator;
 	
 	private TaskRequest taskRequest;
 	private UserRequest userRequest;
+	private User user;
 	
 	@BeforeEach
 	void afterEach() {	
-		User user = new User("Mat", "Dixon", "matdixon@gmail.com", "asd", 67898);
+		user = new User("Mat", "Dixon", "matdixon@gmail.com", "asd", 67898);
 		userRepository.save(user);
 		
 		user = userRepository.findByEmail("matdixon@gmail.com");
@@ -41,8 +50,16 @@ class TaskValidatorTest {
 	
 	@AfterEach
 	void beforeEach() {
-		User user = userRepository.findByEmail("matdixon@gmail.com");
+		user = userRepository.findByEmail("matdixon@gmail.com");
 		userRepository.delete(user);
+	}
+	@Test
+	void deleteTaskTest() {
+		//id = 0
+		assertThrows(BadRequestException.class, () -> taskValidator.deleteValidator(0));
+		//id incorrect -> non-existent
+		long id = taskRepository.count() + HASH_RANDOM;
+		assertThrows(NotFoundException.class, () -> taskValidator.deleteValidator(id));
 	}
 	
 	@Test

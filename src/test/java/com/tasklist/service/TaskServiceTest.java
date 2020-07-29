@@ -67,8 +67,7 @@ class TaskServiceTest {
 		assertDoesNotThrow(()->taskService.storeTask(taskRequest));
 		//delete
 		long id = userRepository.findByEmail("matdixon@gmail.com").getTasks().get(0).getId();//refresh id
-		taskRequest.setId(id);
-		assertDoesNotThrow(() -> taskService.deleteTask(taskRequest));
+		assertDoesNotThrow(() -> taskService.deleteTask(id));
 	}
 
 }
