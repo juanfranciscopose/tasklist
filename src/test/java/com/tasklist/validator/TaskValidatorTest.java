@@ -13,7 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.tasklist.dao.UserRepository;
 import com.tasklist.dto.TaskRequest;
 import com.tasklist.dto.UserRequest;
-import com.tasklist.model.Task;
 import com.tasklist.model.User;
 import com.tasklist.util.exception.UnprocessableEntityException;
 import com.tasklist.util.validator.TaskValidator;
@@ -33,8 +32,6 @@ class TaskValidatorTest {
 	@BeforeEach
 	void afterEach() {	
 		User user = new User("Mat", "Dixon", "matdixon@gmail.com", "asd", 67898);
-		Task task = new Task("test1", "test1", new Date(), true);
-		user.addTask(task);
 		userRepository.save(user);
 		
 		user = userRepository.findByEmail("matdixon@gmail.com");
