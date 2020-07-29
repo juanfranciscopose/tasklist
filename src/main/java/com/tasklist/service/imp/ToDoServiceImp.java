@@ -50,15 +50,14 @@ public class ToDoServiceImp implements ToDoService{
 	}
 
 	@Override
-	//refactor ->no need to search 'to do'
-	public void deleteToDo(ToDoRequest toDoRequest) throws InternalServerErrorException, NotFoundException {
+	public void deleteToDo(long id) throws InternalServerErrorException, NotFoundException {
 		try {
-			ToDo toDo = this.getToDoById(toDoRequest.getId());
-			Task task = taskRepository.findById(toDoRequest.getTask().getId()).get();
+			ToDo toDo = this.getToDoById(id);
+			Task task = taskRepository.findById(toDo.getTask().getId()).get();
 			task.removeToDo(toDo);
 			taskRepository.save(task);
 		} catch (NoSuchElementException  e) {
-			throw new NotFoundException("task with id '"+toDoRequest.getTask().getId()+"' not exist"); 
+			throw new NotFoundException("task not exist"); 
 		} catch (Exception e) {
 			throw new InternalServerErrorException(e.toString());
 		}

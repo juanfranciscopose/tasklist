@@ -83,7 +83,7 @@ public class TaskServiceImp implements TaskService {
 			user.removeTask(task);
 			userRepository.save(user);
 		} catch (NoSuchElementException  e) {
-			throw new NotFoundException("user with id '"+id+"' not exist"); 
+			throw new NotFoundException("user not exist"); 
 		} catch (Exception e) {
 			throw new InternalServerErrorException(e.toString());
 		}

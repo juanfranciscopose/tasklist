@@ -12,7 +12,7 @@ public interface ToDoService {
 	//if "to do" exist return it
 	public ToDo getToDoById(long id) throws NotFoundException, InternalServerErrorException;
 	//remove 'to do' from database
-	public void deleteToDo(ToDoRequest toDoRequest) throws InternalServerErrorException, NotFoundException;
+	public void deleteToDo(long id) throws InternalServerErrorException, NotFoundException;
 	//edit the passed 'to do' as parameter
 	public void updateToDo(ToDoRequest toDoRequest) throws InternalServerErrorException;
 	//changes status when 'to do' is finished
