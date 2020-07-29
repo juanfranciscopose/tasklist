@@ -54,7 +54,7 @@ class TaskValidatorTest {
 		userRepository.delete(user);
 	}
 	@Test
-	void deleteTaskTest() {
+	void deleteTaskValidatorTest() {
 		//id = 0
 		assertThrows(BadRequestException.class, () -> taskValidator.deleteValidator(0));
 		//id incorrect -> non-existent
@@ -63,7 +63,7 @@ class TaskValidatorTest {
 	}
 	
 	@Test
-	void createTaskTest() {
+	void createTaskValidatorTest() {
 		//--MIN FIELDS: title
 		//2 characters
 		taskRequest.setTitle("as");

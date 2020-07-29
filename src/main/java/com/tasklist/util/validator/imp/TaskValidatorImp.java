@@ -29,13 +29,7 @@ public class TaskValidatorImp implements TaskValidator{
 		}
 	}
 	
-	@Override
-	public void deleteValidator(long id) throws BadRequestException, NotFoundException {
-		this.idValidator(id);		
-	}
-
-	@Override
-	public void createValidator(TaskRequest taskRequest) throws UnprocessableEntityException, NotFoundException {
+	private void createAndUpdateCommonFieldsValidator(TaskRequest taskRequest) throws UnprocessableEntityException {
 		//Required
 		if(taskRequest.getTitle() == null || taskRequest.getTitle().isEmpty()) {
 			throw new UnprocessableEntityException("title is required");
@@ -48,7 +42,7 @@ public class TaskValidatorImp implements TaskValidator{
 		if(taskRequest.getTitle().length() < 3 ) {
 			throw new UnprocessableEntityException("the title is very short. Min 3 characters");
 		}
-		 
+				 
 		//max fields
 		if(taskRequest.getTitle().length() > 100 ) {
 			throw new UnprocessableEntityException("the title is very long. Max 100 characters");
@@ -56,6 +50,16 @@ public class TaskValidatorImp implements TaskValidator{
 		if(taskRequest.getDescription().length() > 255) {
 			throw new UnprocessableEntityException("the description is very long. Max 255 characters");
 		}
+	}
+	
+	@Override
+	public void deleteValidator(long id) throws BadRequestException, NotFoundException {
+		this.idValidator(id);		
+	}
+
+	@Override
+	public void createValidator(TaskRequest taskRequest) throws UnprocessableEntityException, NotFoundException {
+		this.createAndUpdateCommonFieldsValidator(taskRequest);	
 		
 		//user exist
 		if (! userValidator.isUserExist(taskRequest.getAuthor().getId())) {
@@ -73,9 +77,13 @@ public class TaskValidatorImp implements TaskValidator{
 	}
 
 	@Override
-	public void updateValidator(TaskRequest task) throws UnprocessableEntityException, NotFoundException {
-		// TODO Auto-generated method stub
-		
+	public void updateValidator(TaskRequest taskRequest) throws UnprocessableEntityException, NotFoundException {
+		this.createAndUpdateCommonFieldsValidator(taskRequest);
+				
+		//task exist
+		if (! isTaskExist(taskRequest.getId())) {
+			throw new NotFoundException("task with id '"+ taskRequest.getId() +"' not exist");	
+		}
 	}
 
 	@Override

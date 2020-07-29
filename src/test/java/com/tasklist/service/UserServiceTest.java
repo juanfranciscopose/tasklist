@@ -15,6 +15,7 @@ import com.tasklist.util.exception.InternalServerErrorException;
 
 @SpringBootTest
 class UserServiceTest {
+	private static final long HASH_RANDOM = 10000;//used to generate a non-existent id
 
 	@Autowired
 	private UserService userService;
@@ -75,6 +76,15 @@ class UserServiceTest {
 		//delete
 		User user = userRepository.findByEmail("jhondoe@gmail.com");
 		assertDoesNotThrow(() -> userService.deleteUser(user.getId()));
+	}
+
+	@Test
+	void getAllUserTaskTest() {
+		//id = 0
+		assertThrows(InternalServerErrorException.class, () -> userService.getAllUserTask(0));
+		//id incorrect -> non-existent
+		long id = userRepository.count() + HASH_RANDOM;
+		assertThrows(InternalServerErrorException.class, () -> userService.getAllUserTask(id));
 	}
 
 }

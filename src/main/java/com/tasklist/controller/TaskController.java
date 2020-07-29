@@ -1,11 +1,15 @@
 package com.tasklist.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,5 +43,22 @@ public class TaskController {
 		this.taskValidator.deleteValidator(id);
 		taskService.deleteTask(id);
 		return new ResponseEntity<>("deleted successfully", HttpStatus.OK);
+	}
+	
+	//endpoint for authenticated user index page - task without 'to do' list
+	@GetMapping()//tested with Postman
+	public ResponseEntity<?> getAllPublicTask() throws InternalServerErrorException {
+		List<TaskRequest> list = taskService.getAllPublicTask();
+		if(! list.isEmpty()) {
+			return new ResponseEntity<List<TaskRequest>>(list, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);//204
+	}
+	
+	@PutMapping()
+	public ResponseEntity<?> editTask(@RequestBody TaskRequest editTask) throws UnprocessableEntityException, NotFoundException, InternalServerErrorException{
+		this.taskValidator.updateValidator(editTask);
+		taskService.updateTask(editTask);
+		return new ResponseEntity<>("update successfully", HttpStatus.OK);
 	}
 }

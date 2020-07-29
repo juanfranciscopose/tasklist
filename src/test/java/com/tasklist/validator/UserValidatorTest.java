@@ -43,7 +43,16 @@ class UserValidatorTest {
 	}
 	
 	@Test
-	void deleteUserTest() {
+	void getAllUserTaskValidatorTest() {
+		//id = 0
+		assertThrows(BadRequestException.class, () -> userValidator.getAllUserTaskValidator(0));
+		//id incorrect -> non-existent
+		long id = userRepository.count() + HASH_RANDOM;
+		assertThrows(NotFoundException.class, () -> userValidator.getAllUserTaskValidator(id));
+	}
+	
+	@Test
+	void deleteUserValidatorTest() {
 		//id = 0
 		assertThrows(BadRequestException.class, () -> userValidator.removeValidator(0));
 		//id incorrect -> non-existent
