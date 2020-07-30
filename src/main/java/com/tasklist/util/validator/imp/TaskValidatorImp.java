@@ -87,9 +87,8 @@ public class TaskValidatorImp implements TaskValidator{
 	}
 
 	@Override
-	public void getAllTaskToDoValidator(long taskId) throws NotFoundException, UnprocessableEntityException {
-		// TODO Auto-generated method stub
-		
+	public void getAllTaskToDoValidator(long taskId) throws NotFoundException, BadRequestException {
+		this.idValidator(taskId);	
 	}
 
 }

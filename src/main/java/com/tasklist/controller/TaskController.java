@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tasklist.dto.TaskRequest;
+import com.tasklist.dto.ToDoRequest;
 import com.tasklist.service.TaskService;
 import com.tasklist.util.exception.BadRequestException;
 import com.tasklist.util.exception.InternalServerErrorException;
@@ -61,4 +62,16 @@ public class TaskController {
 		taskService.updateTask(editTask);
 		return new ResponseEntity<>("update successfully", HttpStatus.OK);
 	}
+	
+	//(for index) - return all 'to do' for a given task - needs in public task 
+	@GetMapping("/{task_id}/todo")
+	public ResponseEntity<?> getAllTaskToDo(@PathVariable("task_id") long taskId) throws NotFoundException, InternalServerErrorException, BadRequestException {	
+		this.taskValidator.getAllTaskToDoValidator(taskId);
+		List<ToDoRequest> list = taskService.getAllToDo(taskId);
+		if(! list.isEmpty()) {
+			return new ResponseEntity<List<ToDoRequest>>(list, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);//204
+	}
+	
 }

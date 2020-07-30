@@ -10,5 +10,5 @@ public interface TaskValidator {
 	public void createValidator(TaskRequest task) throws UnprocessableEntityException, NotFoundException;
 	public boolean isTaskExist(long id);
 	public void updateValidator(TaskRequest task) throws UnprocessableEntityException, NotFoundException;
-	public void getAllTaskToDoValidator(long taskId) throws NotFoundException, UnprocessableEntityException;
+	public void getAllTaskToDoValidator(long taskId) throws NotFoundException, BadRequestException;
 }
