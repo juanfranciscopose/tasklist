@@ -73,9 +73,9 @@ public class ToDoValidatorImp implements ToDoValidator{
 	}
 
 	@Override
-	public void changeStatusValidator(ToDoRequest toDoRequest) throws BadRequestException, NotFoundException {
+	public void changeStatusValidator(long id) throws BadRequestException, NotFoundException {
 		//validate id field
-		this.idValidator(toDoRequest.getId());		
+		this.idValidator(id);		
 	}
 	
 }

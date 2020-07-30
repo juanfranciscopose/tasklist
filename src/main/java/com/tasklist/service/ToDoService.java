@@ -16,6 +16,6 @@ public interface ToDoService {
 	//edit the passed 'to do' as parameter
 	public void updateToDo(ToDoRequest toDoRequest) throws InternalServerErrorException;
 	//changes status when 'to do' is finished
-	public void changeStatus(ToDoRequest toDoRequest) throws InternalServerErrorException;
+	public void changeStatus(long id) throws InternalServerErrorException;
 
 }

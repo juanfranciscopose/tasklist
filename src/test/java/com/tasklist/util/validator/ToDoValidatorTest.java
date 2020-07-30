@@ -1,4 +1,4 @@
-package com.tasklist.validator;
+package com.tasklist.util.validator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,11 +15,11 @@ import com.tasklist.dao.UserRepository;
 import com.tasklist.dto.TaskRequest;
 import com.tasklist.dto.ToDoRequest;
 import com.tasklist.model.Task;
+import com.tasklist.model.ToDo;
 import com.tasklist.model.User;
 import com.tasklist.util.exception.BadRequestException;
 import com.tasklist.util.exception.NotFoundException;
 import com.tasklist.util.exception.UnprocessableEntityException;
-import com.tasklist.util.validator.ToDoValidator;
 
 @SpringBootTest
 class ToDoValidatorTest {
@@ -30,7 +30,7 @@ class ToDoValidatorTest {
 	private User user;
 	private TaskRequest taskRequest = new TaskRequest();
 	private ToDoRequest toDoRequest = new ToDoRequest();
-	
+
 	@Autowired
 	private ToDoRepository toDoRepository;
 	
@@ -52,6 +52,14 @@ class ToDoValidatorTest {
 	void beforeEach() {
 		user = userRepository.findByEmail("matdixon@gmail.com");
 		userRepository.delete(user);
+	}
+	@Test
+	void changeStatusValidatorTest() {
+		//id = 0
+		assertThrows(BadRequestException.class, () -> toDoValidator.changeStatusValidator(0));
+		//id incorrect -> non-existent
+		long id = toDoRepository.count() + HASH_RANDOM;
+		assertThrows(NotFoundException.class, () -> toDoValidator.changeStatusValidator(id));
 	}
 	
 	@Test
@@ -82,5 +90,43 @@ class ToDoValidatorTest {
 		toDoRequest.setDescription("asd");
 		assertDoesNotThrow(() -> toDoValidator.createValidator(toDoRequest));
 	}
-
+	
+	@Test
+	void updateToDoValidatorTest() {
+		//config initial state
+		user = userRepository.findByEmail("matdixon@gmail.com");
+		ToDo toDo = new ToDo("test", new Date());
+		user.getTasks().get(0).addToDo(toDo);
+		userRepository.save(user);
+		
+		user = userRepository.findByEmail("matdixon@gmail.com");
+		taskRequest.setId(user.getTasks().get(0).getId());
+		toDoRequest.setTask(taskRequest);
+		toDoRequest.setTimeStamp(user.getTasks().get(0).getTimeStamp());
+		toDoRequest.setDescription(user.getTasks().get(0).getDescription());
+		
+		//id = 0
+		toDoRequest.setId(0);
+		assertThrows(BadRequestException.class, () -> toDoValidator.editValidator(toDoRequest));
+		//id incorrect -> non-existent
+		long id = toDoRepository.count() + HASH_RANDOM;
+		toDoRequest.setId(id);
+		assertThrows(NotFoundException.class, () -> toDoValidator.editValidator(toDoRequest));
+		
+		//256 characters
+		user = userRepository.findByEmail("matdixon@gmail.com");
+		ToDo toDo1 = user.getTasks().get(0).getList().get(0);
+		toDoRequest.setId(toDo1.getId());//correct id
+		toDoRequest.setDescription("Lorem ipsum dolor sit amet consectetur adipiscing, elit in praesent dictum sagittis, pharetra cubilia felis risus nunc. Mattis mollis varius augue urna luctus sollicitudin litora donec, ac per justo sociis ligula a blandit, accumsan metus senectus sceler..");
+		assertThrows(UnprocessableEntityException.class, () -> toDoValidator.editValidator(toDoRequest));
+		//255 characters
+		toDoRequest.setDescription("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque non nulla porttitor nulla fringilla convallis sed vitae ligula. Proin congue augue non sem consectetur tristique. Vestibulum viverra turpis et lorem lacinia, id congue justo erat curae.");
+		assertDoesNotThrow(() -> toDoValidator.editValidator(toDoRequest));//description correct
+		//2 characters
+		toDoRequest.setDescription("as");
+		assertThrows(UnprocessableEntityException.class, () -> toDoValidator.editValidator(toDoRequest));
+		//3 characters
+		toDoRequest.setDescription("asd");//description correct
+		assertDoesNotThrow(() -> toDoValidator.editValidator(toDoRequest));	
+	}
 }

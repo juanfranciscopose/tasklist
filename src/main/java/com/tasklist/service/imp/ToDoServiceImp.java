@@ -75,9 +75,9 @@ public class ToDoServiceImp implements ToDoService{
 	}
 
 	@Override
-	public void changeStatus(ToDoRequest toDoRequest) throws InternalServerErrorException {
+	public void changeStatus(long id) throws InternalServerErrorException {
 		try {
-			ToDo toDo = this.getToDoById(toDoRequest.getId());
+			ToDo toDo = this.getToDoById(id);
 			toDo.setStatus(!toDo.isStatus());
 			toDoRepository.save(toDo);
 		} catch (Exception e) {

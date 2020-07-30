@@ -10,5 +10,5 @@ public interface ToDoValidator {
 	public void createValidator(ToDoRequest toDo) throws UnprocessableEntityException, NotFoundException;
 	public boolean isToDoExist(long id);
 	public void editValidator(ToDoRequest toDo) throws UnprocessableEntityException, NotFoundException, BadRequestException;
-	public void changeStatusValidator(ToDoRequest toDo) throws BadRequestException, NotFoundException;
+	public void changeStatusValidator(long id) throws BadRequestException, NotFoundException;
 }

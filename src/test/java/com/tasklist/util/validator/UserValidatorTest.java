@@ -1,4 +1,4 @@
-package com.tasklist.validator;
+package com.tasklist.util.validator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,7 +14,6 @@ import com.tasklist.model.User;
 import com.tasklist.util.exception.BadRequestException;
 import com.tasklist.util.exception.NotFoundException;
 import com.tasklist.util.exception.UnprocessableEntityException;
-import com.tasklist.util.validator.UserValidator;
 
 @SpringBootTest
 class UserValidatorTest {
