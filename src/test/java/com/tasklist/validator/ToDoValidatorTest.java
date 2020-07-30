@@ -10,21 +10,29 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.tasklist.dao.ToDoRepository;
 import com.tasklist.dao.UserRepository;
 import com.tasklist.dto.TaskRequest;
 import com.tasklist.dto.ToDoRequest;
 import com.tasklist.model.Task;
 import com.tasklist.model.User;
+import com.tasklist.util.exception.BadRequestException;
+import com.tasklist.util.exception.NotFoundException;
 import com.tasklist.util.exception.UnprocessableEntityException;
 import com.tasklist.util.validator.ToDoValidator;
 
 @SpringBootTest
 class ToDoValidatorTest {
 	
+	private static final long HASH_RANDOM = 10000;//used to generate a non-existent id
+	
 	private Task task;
 	private User user;
 	private TaskRequest taskRequest = new TaskRequest();
 	private ToDoRequest toDoRequest = new ToDoRequest();
+	
+	@Autowired
+	private ToDoRepository toDoRepository;
 	
 	@Autowired
 	private ToDoValidator toDoValidator;
@@ -44,6 +52,15 @@ class ToDoValidatorTest {
 	void beforeEach() {
 		user = userRepository.findByEmail("matdixon@gmail.com");
 		userRepository.delete(user);
+	}
+	
+	@Test
+	void deleteToDoValidatorTest() {
+		//id = 0
+		assertThrows(BadRequestException.class, () -> toDoValidator.removeValidator(0));
+		//id incorrect -> non-existent
+		long id = toDoRepository.count() + HASH_RANDOM;
+		assertThrows(NotFoundException.class, () -> toDoValidator.removeValidator(id));
 	}
 	
 	@Test
