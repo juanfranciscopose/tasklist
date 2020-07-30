@@ -64,7 +64,7 @@ public class TaskController {
 	}
 	
 	//(for index) - return all 'to do' for a given task - needs in public task 
-	@GetMapping("/{task_id}/todo")
+	@GetMapping("/{task_id}/todo")//tested
 	public ResponseEntity<?> getAllTaskToDo(@PathVariable("task_id") long taskId) throws NotFoundException, InternalServerErrorException, BadRequestException {	
 		this.taskValidator.getAllTaskToDoValidator(taskId);
 		List<ToDoRequest> list = taskService.getAllToDo(taskId);
