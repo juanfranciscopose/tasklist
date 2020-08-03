@@ -10,8 +10,18 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.tasklist.security.model.Rol;
+
+
+/*
+ * this class (USER) interacts with the database 
+ */
 
 @Entity
 @Table(name="users")
@@ -40,6 +50,11 @@ public class User {
 	@OneToMany(mappedBy = "author", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.EAGER)
 	private List<Task> tasks;
 	
+	@ManyToMany
+	@JoinTable(name = "user_rol", joinColumns = @JoinColumn(name="user_id"), 
+				inverseJoinColumns = @JoinColumn(name= "rol_id"))
+	private List<Rol> rols;
+	
 	public User() {}
 
 	public User(String name, String surname, String email, String password, long telephone) {
@@ -49,6 +64,7 @@ public class User {
 		this.password = password;
 		this.telephone = telephone;
 		this.tasks = new ArrayList<Task>();
+		this.rols = new ArrayList<Rol>();
 	}
 
 	public long getId() {
@@ -116,6 +132,14 @@ public class User {
 		task.setAuthor(null);
 	}
 
+	public List<Rol> getRols() {
+		return rols;
+	}
+
+	public void setRols(List<Rol> rols) {
+		this.rols = rols;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -144,7 +168,6 @@ public class User {
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", name=" + name + ", surname=" + surname + ", email=" + email + ", password="
-				+ password + ", telephone=" + telephone + ", tasks=" + tasks + "]";
+				+ password + ", telephone=" + telephone + ", tasks=" + tasks + ", rols=" + rols + "]";
 	}
-	
 }
