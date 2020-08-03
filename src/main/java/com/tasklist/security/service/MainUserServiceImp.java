@@ -17,6 +17,8 @@ public class MainUserServiceImp implements UserDetailsService{
 	private UserRepository userRepository;
 	
 	@Override
+	//converts the user class into a main user class (necessary for spring security)
+	//it takes a user from the database and makes it main user
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		User user = userRepository.findByEmail(username).get();
 		return MainUser.buildMainUserFromUser(user);
