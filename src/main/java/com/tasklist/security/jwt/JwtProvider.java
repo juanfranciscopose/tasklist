@@ -12,6 +12,9 @@ import com.tasklist.security.model.MainUser;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+/*
+ * jwt facade 
+ */
 @Component
 public class JwtProvider {
 	private static final Logger logger = LoggerFactory.getLogger(JwtProvider.class);

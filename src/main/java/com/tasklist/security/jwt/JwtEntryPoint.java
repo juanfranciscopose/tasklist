@@ -18,6 +18,7 @@ public class JwtEntryPoint implements AuthenticationEntryPoint{
 	private static final Logger logger = LoggerFactory.getLogger(JwtEntryPoint.class);
 	
 	@Override
+	//return which token is authorized
 	public void commence(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException authException) throws IOException, ServletException {
 		logger.error("fail JwtEntryPoint");
