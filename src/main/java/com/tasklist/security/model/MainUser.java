@@ -11,7 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.tasklist.model.User;
 
 /*
- * This class (Main User) interacts with the framework and has security functionality.
+ * - like user wrapper
+ * - This class (Main User) interacts with the framework and has security functionality.
  */
 
 @SuppressWarnings("serial")
