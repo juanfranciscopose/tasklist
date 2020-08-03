@@ -1,5 +1,8 @@
 package com.tasklist.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UserRequest {
 	private long id;
 	private String name;
@@ -7,6 +10,7 @@ public class UserRequest {
 	private String email;
 	private String password;
 	private long telephone;
+	private List<String> rols;
 	
 	public UserRequest() {}
 	
@@ -17,6 +21,7 @@ public class UserRequest {
 		this.email = email;
 		this.password = password;
 		this.telephone = telephone;
+		this.rols = new ArrayList<String>();
 	}
 
 	public long getId() {
@@ -55,5 +60,14 @@ public class UserRequest {
 	public void setTelephone(long telephone) {
 		this.telephone = telephone;
 	}
+
+	public List<String> getRols() {
+		return rols;
+	}
+
+	public void setRols(List<String> rols) {
+		this.rols = rols;
+	}
+	
 	
 }
