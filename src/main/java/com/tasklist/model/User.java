@@ -50,7 +50,7 @@ public class User {
 	@OneToMany(mappedBy = "author", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE}, orphanRemoval = true, fetch = FetchType.EAGER)
 	private List<Task> tasks;
 	
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_rol", joinColumns = @JoinColumn(name="user_id"), 
 				inverseJoinColumns = @JoinColumn(name= "rol_id"))
 	private List<Rol> rols;

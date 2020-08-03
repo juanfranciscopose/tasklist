@@ -37,7 +37,7 @@ class UserValidatorTest {
 	
 	@AfterEach
 	void beforeEach() {
-		User user = userRepository.findByEmail("matdixon@gmail.com");
+		User user = userRepository.findByEmail("matdixon@gmail.com").get();
 		userRepository.delete(user);
 	}
 	
@@ -61,7 +61,7 @@ class UserValidatorTest {
 		//right way
 		User user = new User("Dan", "Carter", "dancarter@gmail.com", "asd", 67898);
 		userRepository.save(user);
-		long removeId = userRepository.findByEmail("dancarter@gmail.com").getId();
+		long removeId = userRepository.findByEmail("dancarter@gmail.com").get().getId();
 		assertDoesNotThrow(()-> userValidator.removeValidator(removeId));
 		userRepository.delete(user);
 	}

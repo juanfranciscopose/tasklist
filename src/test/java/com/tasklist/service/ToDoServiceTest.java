@@ -54,19 +54,19 @@ class ToDoServiceTest {
 	
 	@AfterEach
 	void beforeEach() {
-		user = userRepository.findByEmail("matdixon@gmail.com");
+		user = userRepository.findByEmail("matdixon@gmail.com").get();
 		userRepository.delete(user);
 	}	
 	@Test
 	void updateToDoTest() {	
 		//config initial state
 		//new to do
-		task = userRepository.findByEmail("matdixon@gmail.com").getTasks().get(0);
+		task = userRepository.findByEmail("matdixon@gmail.com").get().getTasks().get(0);
 		ToDo toDo = new ToDo("new to do", new Date());
 		task.addToDo(toDo);
 		taskRepository.save(task);
 		
-		toDo = userRepository.findByEmail("matdixon@gmail.com").getTasks().get(0).getList().get(0);
+		toDo = userRepository.findByEmail("matdixon@gmail.com").get().getTasks().get(0).getList().get(0);
 		toDoRequest.setDescription(toDo.getDescription());
 		toDoRequest.setTimeStamp(toDo.getTimeStamp());;
 		
@@ -90,7 +90,7 @@ class ToDoServiceTest {
 	@Test
 	void storeAndDeleteToDoTest() {		
 		//store
-		user = userRepository.findByEmail("matdixon@gmail.com");
+		user = userRepository.findByEmail("matdixon@gmail.com").get();
 		taskRequest.setId(user.getTasks().get(0).getId());
 		toDoRequest.setTask(taskRequest);
 		toDoRequest.setTimeStamp(new Date());
@@ -103,7 +103,7 @@ class ToDoServiceTest {
 		
 		//delete
 		assertThrows(InternalServerErrorException.class, () ->toDoService.deleteToDo(0));
-		long id = userRepository.findByEmail("matdixon@gmail.com").getTasks().get(0).getList().get(0).getId();
+		long id = userRepository.findByEmail("matdixon@gmail.com").get().getTasks().get(0).getList().get(0).getId();
 		assertDoesNotThrow(() -> toDoService.deleteToDo(id));
 	}
 	
@@ -111,13 +111,13 @@ class ToDoServiceTest {
 	void changeStatusTest() {
 		//config initial state
 		//new to do
-		task = userRepository.findByEmail("matdixon@gmail.com").getTasks().get(0);
+		task = userRepository.findByEmail("matdixon@gmail.com").get().getTasks().get(0);
 		ToDo toDo = new ToDo("new to do", new Date());
 		task.addToDo(toDo);
 		taskRepository.save(task);
 		
 		assertThrows(InternalServerErrorException.class, () -> toDoService.changeStatus(0));
-		long id = userRepository.findByEmail("matdixon@gmail.com").getTasks().get(0).getList().get(0).getId();
+		long id = userRepository.findByEmail("matdixon@gmail.com").get().getTasks().get(0).getList().get(0).getId();
 		assertDoesNotThrow(() -> toDoService.changeStatus(id));
 	}
 

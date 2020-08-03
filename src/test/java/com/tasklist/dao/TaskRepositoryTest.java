@@ -45,8 +45,8 @@ class TaskRepositoryTest {
 	
 	@AfterEach
 	public void after() {
-		userRepository.delete(userRepository.findByEmail(user1.getEmail()));
-		userRepository.delete(userRepository.findByEmail(user2.getEmail()));
+		userRepository.delete(userRepository.findByEmail(user1.getEmail()).get());
+		userRepository.delete(userRepository.findByEmail(user2.getEmail()).get());
 	}
 	
 	@Test
@@ -56,26 +56,26 @@ class TaskRepositoryTest {
 		assertEquals(1, listStatusFalse.size());
 		
 		//add other task to list
-		user1 = userRepository.findByEmail(user1.getEmail());
+		user1 = userRepository.findByEmail(user1.getEmail()).get();
 		assertEquals(1, user1.getTasks().size());
 		Task task3 = new Task("test2", "test2", new Date(), false);
 		user1.addTask(task3);
 		userRepository.save(user1);
 		
 		//check task list again
-		user1 = userRepository.findByEmail(user1.getEmail());
+		user1 = userRepository.findByEmail(user1.getEmail()).get();
 		assertEquals(2, user1.getTasks().size());
 		listStatusFalse = taskRepository.findByStatus(false);
 		assertEquals(2, listStatusFalse.size());
 		
 		//delete one task
-		user1 = userRepository.findByEmail(user1.getEmail());
+		user1 = userRepository.findByEmail(user1.getEmail()).get();
 		Task task4 = user1.getTasks().get(1);
 		user1.removeTask(task4);
 		userRepository.save(user1);
 		
 		//check task list again
-		user1 = userRepository.findByEmail(user1.getEmail());
+		user1 = userRepository.findByEmail(user1.getEmail()).get();
 		assertEquals(1, user1.getTasks().size());
 		listStatusFalse = taskRepository.findByStatus(false);
 		assertEquals(1, listStatusFalse.size());
@@ -88,26 +88,26 @@ class TaskRepositoryTest {
 		assertEquals(1, listStatusTrue.size());
 		
 		//add other task to list
-		user2 = userRepository.findByEmail(user2.getEmail());
+		user2 = userRepository.findByEmail(user2.getEmail()).get();
 		assertEquals(1, user2.getTasks().size());
 		Task task3 = new Task("test1", "test1", new Date(), true);
 		user2.addTask(task3);
 		userRepository.save(user2);
 		
 		//check task list again
-		user2 = userRepository.findByEmail(user2.getEmail());
+		user2 = userRepository.findByEmail(user2.getEmail()).get();
 		assertEquals(2, user2.getTasks().size());
 		listStatusTrue = taskRepository.findByStatus(true);
 		assertEquals(2, listStatusTrue.size());
 		
 		//delete one task
-		user2 = userRepository.findByEmail(user2.getEmail());
+		user2 = userRepository.findByEmail(user2.getEmail()).get();
 		Task task4 = user2.getTasks().get(1);
 		user2.removeTask(task4);
 		userRepository.save(user2);
 		
 		//check task list again
-		user2 = userRepository.findByEmail(user2.getEmail());
+		user2 = userRepository.findByEmail(user2.getEmail()).get();
 		assertEquals(1, user2.getTasks().size());
 		listStatusTrue = taskRepository.findByStatus(true);
 		assertEquals(1, listStatusTrue.size());

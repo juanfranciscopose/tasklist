@@ -34,14 +34,14 @@ class TaskServiceTest {
 		user = new User("Mat", "Dixon", "matdixon@gmail.com", "asd", 67898);
 		userRepository.save(user);
 		
-		user = userRepository.findByEmail("matdixon@gmail.com");
+		user = userRepository.findByEmail("matdixon@gmail.com").get();
 		userRequest = new UserRequest(user.getId(), null, null, null, null, 0);
 		taskRequest = new TaskRequest(0, "test2", "test2 - private", new Date(), false, userRequest, null);
 	}
 	
 	@AfterEach
 	void beforeEach() {
-		user = userRepository.findByEmail("matdixon@gmail.com");
+		user = userRepository.findByEmail("matdixon@gmail.com").get();
 		userRepository.delete(user);
 	}
 	
@@ -49,12 +49,12 @@ class TaskServiceTest {
 	void updateTaskTest() {	
 		//generate task to update
 		//--- Refactoring ---
-		user = userRepository.findByEmail("matdixon@gmail.com");
+		user = userRepository.findByEmail("matdixon@gmail.com").get();
 		Task task = new Task("update task", "test update", new Date(), true);
 		user.addTask(task);
 		userRepository.save(user);
 		
-		user = userRepository.findByEmail("matdixon@gmail.com");
+		user = userRepository.findByEmail("matdixon@gmail.com").get();
 		task = user.getTasks().get(0);
 		
 		taskRequest.setId(task.getId());
@@ -107,7 +107,7 @@ class TaskServiceTest {
 		taskRequest.setDescription("test2 - private");
 		assertDoesNotThrow(()->taskService.storeTask(taskRequest));
 		//delete
-		long id = userRepository.findByEmail("matdixon@gmail.com").getTasks().get(0).getId();//refresh id
+		long id = userRepository.findByEmail("matdixon@gmail.com").get().getTasks().get(0).getId();//refresh id
 		assertDoesNotThrow(() -> taskService.deleteTask(id));
 	}
 

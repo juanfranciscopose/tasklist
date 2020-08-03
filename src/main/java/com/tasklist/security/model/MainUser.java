@@ -14,6 +14,7 @@ import com.tasklist.model.User;
  * This class interacts with the framework and has security functionality.
  */
 
+@SuppressWarnings("serial")
 public class MainUser implements UserDetails{
 
 	private String email;

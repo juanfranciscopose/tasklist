@@ -34,7 +34,7 @@ class UserServiceTest {
 	
 	@AfterEach
 	void beforeEach() {
-		User user = userRepository.findByEmail("matdixon@gmail.com");
+		User user = userRepository.findByEmail("matdixon@gmail.com").get();
 		userRepository.delete(user);
 	}
 	@Test
@@ -74,7 +74,7 @@ class UserServiceTest {
 		assertDoesNotThrow(() -> userService.storeUser(userRequest));
 		
 		//delete
-		User user = userRepository.findByEmail("jhondoe@gmail.com");
+		User user = userRepository.findByEmail("jhondoe@gmail.com").get();
 		assertDoesNotThrow(() -> userService.deleteUser(user.getId()));
 	}
 

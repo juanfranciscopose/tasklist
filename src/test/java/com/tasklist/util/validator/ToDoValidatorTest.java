@@ -50,7 +50,7 @@ class ToDoValidatorTest {
 	
 	@AfterEach
 	void beforeEach() {
-		user = userRepository.findByEmail("matdixon@gmail.com");
+		user = userRepository.findByEmail("matdixon@gmail.com").get();
 		userRepository.delete(user);
 	}
 	@Test
@@ -73,7 +73,7 @@ class ToDoValidatorTest {
 	
 	@Test
 	void createToDoValidatorTest() {
-		user = userRepository.findByEmail("matdixon@gmail.com");
+		user = userRepository.findByEmail("matdixon@gmail.com").get();
 		taskRequest.setId(user.getTasks().get(0).getId());
 		toDoRequest.setTask(taskRequest);
 		toDoRequest.setTimeStamp(new Date());
@@ -94,12 +94,12 @@ class ToDoValidatorTest {
 	@Test
 	void updateToDoValidatorTest() {
 		//config initial state
-		user = userRepository.findByEmail("matdixon@gmail.com");
+		user = userRepository.findByEmail("matdixon@gmail.com").get();
 		ToDo toDo = new ToDo("test", new Date());
 		user.getTasks().get(0).addToDo(toDo);
 		userRepository.save(user);
 		
-		user = userRepository.findByEmail("matdixon@gmail.com");
+		user = userRepository.findByEmail("matdixon@gmail.com").get();
 		taskRequest.setId(user.getTasks().get(0).getId());
 		toDoRequest.setTask(taskRequest);
 		toDoRequest.setTimeStamp(user.getTasks().get(0).getTimeStamp());
@@ -114,7 +114,7 @@ class ToDoValidatorTest {
 		assertThrows(NotFoundException.class, () -> toDoValidator.editValidator(toDoRequest));
 		
 		//256 characters
-		user = userRepository.findByEmail("matdixon@gmail.com");
+		user = userRepository.findByEmail("matdixon@gmail.com").get();
 		ToDo toDo1 = user.getTasks().get(0).getList().get(0);
 		toDoRequest.setId(toDo1.getId());//correct id
 		toDoRequest.setDescription("Lorem ipsum dolor sit amet consectetur adipiscing, elit in praesent dictum sagittis, pharetra cubilia felis risus nunc. Mattis mollis varius augue urna luctus sollicitudin litora donec, ac per justo sociis ligula a blandit, accumsan metus senectus sceler..");

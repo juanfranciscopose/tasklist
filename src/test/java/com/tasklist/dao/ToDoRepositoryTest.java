@@ -45,12 +45,12 @@ class ToDoRepositoryTest {
 	
 	@AfterEach
 	public void after() {
-		userRepository.delete(userRepository.findByEmail(user.getEmail()));
+		userRepository.delete(userRepository.findByEmail(user.getEmail()).get());
 	}
 	@Test
 	void updateToDoTest() {
 		//check initial state (only one 'to do' on list)
-		user = userRepository.findByEmail(user.getEmail());
+		user = userRepository.findByEmail(user.getEmail()).get();
 		assertEquals(1, user.getTasks().size());
 		task = user.getTasks().get(0);
 		assertEquals(1, task.getList().size());

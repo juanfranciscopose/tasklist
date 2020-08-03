@@ -42,14 +42,14 @@ class TaskValidatorTest {
 		user = new User("Mat", "Dixon", "matdixon@gmail.com", "asd", 67898);
 		userRepository.save(user);
 		
-		user = userRepository.findByEmail("matdixon@gmail.com");
+		user = userRepository.findByEmail("matdixon@gmail.com").get();
 		userRequest = new UserRequest(user.getId(), null, null, null, null, 0);
 		taskRequest = new TaskRequest(0, "test2", "test2", new Date(), false, userRequest, null);
 	}
 	
 	@AfterEach
 	void beforeEach() {
-		user = userRepository.findByEmail("matdixon@gmail.com");
+		user = userRepository.findByEmail("matdixon@gmail.com").get();
 		userRepository.delete(user);
 	}
 	@Test
