@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,13 +24,14 @@ import com.tasklist.util.validator.UserValidator;
 @RequestMapping(path = "/users")
 @CrossOrigin
 public class UserController {
-
+	
 	@Autowired
 	private UserService userService;
 	
 	@Autowired
 	private UserValidator userValidator;
 	
+	@PreAuthorize("hasAuthority('ROL_ADMIN')")
 	@DeleteMapping("/{id}")//tested with Postman
 	public ResponseEntity<?> removeUser(@PathVariable("id") long id) throws BadRequestException, InternalServerErrorException, NotFoundException{
 		userValidator.removeValidator(id);

@@ -8,7 +8,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,18 +25,9 @@ import com.tasklist.util.exception.UnprocessableEntityException;
 import com.tasklist.util.validator.UserValidator;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/auth")// - PERMIT ALL - 
 @CrossOrigin //from any url
 public class AuthController {
-	
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-	
-	@Autowired
-	private AuthenticationManager authManager;
-	
-	@Autowired
-	private JwtProvider jwtProvider;
 	
 	@Autowired
 	private UserService userService;
@@ -45,15 +35,13 @@ public class AuthController {
 	@Autowired
 	private UserValidator userValidator;
 	
-	@PostMapping("/users")
-	public ResponseEntity<?> createUser(@RequestBody UserRequest user) throws UnprocessableEntityException, InternalServerErrorException, NotFoundException{
-		userValidator.createValidator(user);
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		userService.storeUser(user);
-		return new ResponseEntity<>("created successfully", HttpStatus.CREATED);
-	}
+	@Autowired
+	private AuthenticationManager authManager;
 	
-	@PostMapping("/login")
+	@Autowired
+	private JwtProvider jwtProvider;
+	
+	@PostMapping("/login")//miss all validations
 	public ResponseEntity<Credentials> login(@RequestBody LoginRequest loginRequest){
 		Authentication auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(auth);
@@ -61,5 +49,12 @@ public class AuthController {
 		UserDetails userDetails = (UserDetails) auth.getPrincipal();
 		Credentials credentials = new Credentials(token, userDetails.getUsername(), userDetails.getAuthorities());
 		return new ResponseEntity<>(credentials, HttpStatus.OK);		
+	}
+	
+	@PostMapping("/users")
+	public ResponseEntity<?> createUser(@RequestBody UserRequest user) throws UnprocessableEntityException, InternalServerErrorException, NotFoundException{
+		userValidator.createValidator(user);
+		userService.storeUser(user);
+		return new ResponseEntity<>("created successfully", HttpStatus.CREATED);
 	}
 }

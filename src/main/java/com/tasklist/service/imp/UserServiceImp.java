@@ -7,6 +7,7 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.tasklist.dao.UserRepository;
@@ -25,6 +26,10 @@ import com.tasklist.util.exception.NotFoundException;
 
 @Service
 public class UserServiceImp implements UserService{
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
 	@Autowired
 	private RolService rolService;
 	
@@ -34,9 +39,12 @@ public class UserServiceImp implements UserService{
 	@Override
 	public void storeUser(UserRequest userRequest) throws InternalServerErrorException {
 		try {
+			//generate user(data base)
 			User user = new User(userRequest.getName(), userRequest.getSurname(), userRequest.getEmail(), 
 					userRequest.getPassword(), userRequest.getTelephone());
-			
+			//encoder pass
+			user.setPassword(passwordEncoder.encode(user.getPassword()));
+			//set rols
 			Set<Rol> rols = new HashSet<>();
 			rols.add(rolService.getRolByRolName(RolName.ROL_USER));
 			if (userRequest.getRols() != null && userRequest.getRols().contains("admin")) {
