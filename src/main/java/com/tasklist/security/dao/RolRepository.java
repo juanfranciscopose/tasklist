@@ -10,5 +10,5 @@ import com.tasklist.security.model.Rol;
 
 @Repository
 public interface RolRepository extends JpaRepository<Rol, Integer>{
-	public Optional<Rol> findByRolName(RolName rolName);
+	public Optional<Rol> findByRol(RolName rol);
 }

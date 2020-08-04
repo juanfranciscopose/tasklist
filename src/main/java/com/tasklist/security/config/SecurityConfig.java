@@ -16,11 +16,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.tasklist.security.jwt.JwtEntryPoint;
 import com.tasklist.security.jwt.JwtTokenFilter;
-import com.tasklist.security.service.MainUserServiceImp;
+import com.tasklist.security.service.imp.MainUserServiceImp;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)//only Admin rol
+@EnableGlobalMethodSecurity(prePostEnabled = true)//for Admin rol
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	@Autowired
 	private MainUserServiceImp mainUserService;

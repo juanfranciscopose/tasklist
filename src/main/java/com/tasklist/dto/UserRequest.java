@@ -1,7 +1,7 @@
 package com.tasklist.dto;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class UserRequest {
 	private long id;
@@ -10,7 +10,7 @@ public class UserRequest {
 	private String email;
 	private String password;
 	private long telephone;
-	private List<String> rols;
+	private Set<String> rols;
 	
 	public UserRequest() {}
 	
@@ -21,7 +21,7 @@ public class UserRequest {
 		this.email = email;
 		this.password = password;
 		this.telephone = telephone;
-		this.rols = new ArrayList<String>();
+		this.rols = new HashSet<String>();
 	}
 
 	public long getId() {
@@ -61,11 +61,11 @@ public class UserRequest {
 		this.telephone = telephone;
 	}
 
-	public List<String> getRols() {
+	public Set<String> getRols() {
 		return rols;
 	}
 
-	public void setRols(List<String> rols) {
+	public void setRols(Set<String> rols) {
 		this.rols = rols;
 	}
 	

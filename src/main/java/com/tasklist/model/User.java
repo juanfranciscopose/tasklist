@@ -1,7 +1,9 @@
 package com.tasklist.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -41,7 +43,7 @@ public class User {
 	@Column(name="email", nullable = false, length = 100, unique = true)
 	private String email;
 	
-	@Column(name="password", nullable = false, length = 8)
+	@Column(name="password", nullable = false, length = 255)
 	private String password;
 	
 	@Column(name="telephone", length = 20)
@@ -53,7 +55,7 @@ public class User {
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "user_rol", joinColumns = @JoinColumn(name="user_id"), 
 				inverseJoinColumns = @JoinColumn(name= "rol_id"))
-	private List<Rol> rols;
+	private Set<Rol> rols;
 	
 	public User() {}
 
@@ -64,7 +66,7 @@ public class User {
 		this.password = password;
 		this.telephone = telephone;
 		this.tasks = new ArrayList<Task>();
-		this.rols = new ArrayList<Rol>();
+		this.rols = new HashSet<Rol>();
 	}
 
 	public long getId() {
@@ -132,11 +134,11 @@ public class User {
 		task.setAuthor(null);
 	}
 
-	public List<Rol> getRols() {
+	public Set<Rol> getRols() {
 		return rols;
 	}
 
-	public void setRols(List<Rol> rols) {
+	public void setRols(Set<Rol> rols) {
 		this.rols = rols;
 	}
 

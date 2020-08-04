@@ -21,7 +21,7 @@ public class RolServiceImp implements RolService{
 	@Override
 	public Rol getRolByRolName(RolName rolName) throws NotFoundException, InternalServerErrorException {
 		try {
-			Rol rol = rolRepository.findByRolName(rolName).get();
+			Rol rol = rolRepository.findByRol(rolName).get();
 			return rol;
 		} catch (NoSuchElementException e) {
 			throw new NotFoundException("rol with name: "+rolName+" not exist");
@@ -43,7 +43,7 @@ public class RolServiceImp implements RolService{
 	@Override
 	public void deleteRol(RolName rolName) throws NotFoundException, InternalServerErrorException {
 		try {
-			Rol rol = rolRepository.findByRolName(rolName).get();
+			Rol rol = rolRepository.findByRol(rolName).get();
 			rolRepository.delete(rol);
 		} catch (NoSuchElementException e) {
 			throw new NotFoundException("rol with name: "+rolName+" not exist");

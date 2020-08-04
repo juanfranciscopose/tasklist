@@ -15,7 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.tasklist.security.service.MainUserServiceImp;
+import com.tasklist.security.service.imp.MainUserServiceImp;
 
 public class JwtTokenFilter extends OncePerRequestFilter{
 	
@@ -43,7 +43,7 @@ public class JwtTokenFilter extends OncePerRequestFilter{
 				SecurityContextHolder.getContext().setAuthentication(auth);
 			}
 		} catch (Exception e) {
-			logger.error("fail JwtTokenFilter - doFilterInternal");
+			logger.error("fail JwtTokenFilter - doFilterInternal"+ e.toString());
 		}
 		filterChain.doFilter(request, response);
 	}
