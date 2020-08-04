@@ -41,7 +41,7 @@ public class JwtProvider {
 			Jwts.parser().setSigningKey(key).parseClaimsJws(token);
 			return true;
 		} catch (Exception e) {
-			logger.error("fail JwtProvider - validateToken");
+			logger.error("fail JwtProvider - validateToken: "+e.toString());
 			return false;
 		}
 	}
