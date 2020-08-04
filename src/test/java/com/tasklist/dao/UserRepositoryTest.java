@@ -2,7 +2,10 @@ package com.tasklist.dao;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,10 +36,9 @@ class UserRepositoryTest {
 	@Test
 	void findByEmailTest() {
 		//incorrect email
-		User userByEmail = userRepository.findByEmail("notexist@gmail.com").get();
-		assertThat(userByEmail).isNull();
+		assertThrows(NoSuchElementException.class, () -> userRepository.findByEmail("notexist@gmail.com").get());
 		//ok
-		userByEmail = userRepository.findByEmail("jhondoe@gmail.com").get();
+		User userByEmail = userRepository.findByEmail("jhondoe@gmail.com").get();
 		assertThat(userByEmail).isNotNull();
 	}
 	
@@ -49,11 +51,10 @@ class UserRepositoryTest {
 	@Test
 	void findByEmailAndPasswordTest() {
 		//incorrect password
-		User userByEmailAndPassword = userRepository.findByEmailAndPassword("jhondoe@gmail.com", "123").get();
-		assertThat(userByEmailAndPassword).isNull();
+		User userByEmailAndPassword;
+		assertThrows(NoSuchElementException.class, () -> userRepository.findByEmailAndPassword("jhondoe@gmail.com", "123").get());
 		//incorrect email
-		userByEmailAndPassword = userRepository.findByEmailAndPassword("jhon@gmail.com", "asd").get();
-		assertThat(userByEmailAndPassword).isNull();
+		assertThrows(NoSuchElementException.class, () -> userRepository.findByEmailAndPassword("jhon@gmail.com", "asd").get());
 		//ok
 		userByEmailAndPassword = userRepository.findByEmailAndPassword("jhondoe@gmail.com", "asd").get();
 		assertThat(userByEmailAndPassword).isNotNull();	

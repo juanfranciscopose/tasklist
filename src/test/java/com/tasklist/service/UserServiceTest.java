@@ -52,14 +52,8 @@ class UserServiceTest {
 		userRequest.setSurname("Lorem ipsum dolor sit amet consectetur adipiscing elit luctus at euismod tristique, metus nisi urna.Lorem ipsum dolor sit amet consectetur adipiscing elit luctus at euismod tristique, metus nisi urna..");
 		assertThrows(InternalServerErrorException.class, () -> userService.storeUser(userRequest));
 				
-		//--password
-		userRequest.setSurname("Doe");
-		//9 characters
-		userRequest.setPassword("123456789");
-		assertThrows(InternalServerErrorException.class, () -> userService.storeUser(userRequest));
-
 		//--email
-		userRequest.setPassword("asd");
+		userRequest.setSurname("Doe");
 		//101 characters
 		userRequest.setEmail("Lorem ipsum dolor sit amet consectetur adipiscing elit luctus at euismod tristique, metus nisi urna..");
 		assertThrows(InternalServerErrorException.class, () -> userService.storeUser(userRequest));
