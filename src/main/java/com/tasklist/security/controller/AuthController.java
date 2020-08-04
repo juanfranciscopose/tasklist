@@ -14,26 +14,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tasklist.dto.UserRequest;
 import com.tasklist.security.dto.Credentials;
 import com.tasklist.security.dto.LoginRequest;
 import com.tasklist.security.jwt.JwtProvider;
-import com.tasklist.service.UserService;
-import com.tasklist.util.exception.InternalServerErrorException;
-import com.tasklist.util.exception.NotFoundException;
-import com.tasklist.util.exception.UnprocessableEntityException;
-import com.tasklist.util.validator.UserValidator;
 
 @RestController
 @RequestMapping("/auth")// - PERMIT ALL - 
 @CrossOrigin //from any url
 public class AuthController {
-	
-	@Autowired
-	private UserService userService;
-	
-	@Autowired
-	private UserValidator userValidator;
 	
 	@Autowired
 	private AuthenticationManager authManager;
@@ -49,12 +37,5 @@ public class AuthController {
 		UserDetails userDetails = (UserDetails) auth.getPrincipal();
 		Credentials credentials = new Credentials(token, userDetails.getUsername(), userDetails.getAuthorities());
 		return new ResponseEntity<>(credentials, HttpStatus.OK);		
-	}
-	
-	@PostMapping("/users")
-	public ResponseEntity<?> createUser(@RequestBody UserRequest user) throws UnprocessableEntityException, InternalServerErrorException, NotFoundException{
-		userValidator.createValidator(user);
-		userService.storeUser(user);
-		return new ResponseEntity<>("created successfully", HttpStatus.CREATED);
 	}
 }
