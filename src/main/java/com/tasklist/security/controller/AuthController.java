@@ -14,14 +14,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tasklist.security.dto.Credentials;
+import com.tasklist.security.dto.Credential;
 import com.tasklist.security.dto.LoginRequest;
 import com.tasklist.security.jwt.JwtProvider;
+import com.tasklist.security.validator.LoginValidator;
+import com.tasklist.util.exception.UnprocessableEntityException;
 
 @RestController
 @RequestMapping("/auth")// - PERMIT ALL - 
 @CrossOrigin //from any url
 public class AuthController {
+	@Autowired
+	private LoginValidator loginValidator;
 	
 	@Autowired
 	private AuthenticationManager authManager;
@@ -30,12 +34,13 @@ public class AuthController {
 	private JwtProvider jwtProvider;
 	
 	@PostMapping("/login")//miss all validations
-	public ResponseEntity<Credentials> login(@RequestBody LoginRequest loginRequest){
+	public ResponseEntity<Credential> login(@RequestBody LoginRequest loginRequest) throws UnprocessableEntityException{
+		loginValidator.loginValidator(loginRequest);
 		Authentication auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(auth);
 		String token = jwtProvider.generateToken(auth);
 		UserDetails userDetails = (UserDetails) auth.getPrincipal();
-		Credentials credentials = new Credentials(token, userDetails.getUsername(), userDetails.getAuthorities());
-		return new ResponseEntity<>(credentials, HttpStatus.OK);		
+		Credential credentials = new Credential(token, userDetails.getUsername(), userDetails.getAuthorities());
+		return new ResponseEntity<Credential>(credentials, HttpStatus.OK);		
 	}
 }

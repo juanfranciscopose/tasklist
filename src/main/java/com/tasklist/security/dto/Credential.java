@@ -4,14 +4,14 @@ import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
 
-public class Credentials {
+public class Credential {
 	private String token;
 	private String bearer;
 	private String username;
 	private Collection<? extends GrantedAuthority> authorities;
 	
 	
-	public Credentials(String token, String username, Collection<? extends GrantedAuthority> authorities) {
+	public Credential(String token, String username, Collection<? extends GrantedAuthority> authorities) {
 		super();
 		this.token = token;
 		this.username = username;
