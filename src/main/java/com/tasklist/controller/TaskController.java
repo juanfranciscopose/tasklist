@@ -38,14 +38,14 @@ public class TaskController {
 	public ResponseEntity<?> createTask(@RequestBody TaskRequest task) throws UnprocessableEntityException, NotFoundException, InternalServerErrorException{
 		taskValidator.createValidator(task);
 		taskService.storeTask(task);
-		return new ResponseEntity<>("created successfully", HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}	
 	
 	@DeleteMapping("/{id}")//tested with Postman
 	public ResponseEntity<?> removeTask(@PathVariable("id") long id) throws BadRequestException, NotFoundException, InternalServerErrorException{
 		this.taskValidator.deleteValidator(id);
 		taskService.deleteTask(id);
-		return new ResponseEntity<>("deleted successfully", HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	//endpoint for authenticated user index page - task without 'to do' list
@@ -62,7 +62,7 @@ public class TaskController {
 	public ResponseEntity<?> editTask(@RequestBody TaskRequest editTask) throws UnprocessableEntityException, NotFoundException, InternalServerErrorException{
 		this.taskValidator.updateValidator(editTask);
 		taskService.updateTask(editTask);
-		return new ResponseEntity<>("update successfully", HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	//(for index) - return all 'to do' for a given task - needs in public task 

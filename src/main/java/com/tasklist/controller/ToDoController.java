@@ -35,28 +35,28 @@ public class ToDoController {
 	public ResponseEntity<?> createToDo(@RequestBody ToDoRequest toDo) throws UnprocessableEntityException, NotFoundException, InternalServerErrorException{
 		this.toDoValidator.createValidator(toDo);
 		toDoService.storeToDo(toDo);
-		return new ResponseEntity<>("created successfully", HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@DeleteMapping("/{id}")//tested with postman
 	public ResponseEntity<?> removeToDo(@PathVariable("id") long id) throws BadRequestException, NotFoundException, InternalServerErrorException{
 		this.toDoValidator.removeValidator(id);
 		toDoService.deleteToDo(id);
-		return new ResponseEntity<>("deleted successfully", HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 
 	@PutMapping()//tested with postman
 	public ResponseEntity<?> editToDo(@RequestBody ToDoRequest editToDo) throws UnprocessableEntityException, NotFoundException, BadRequestException, InternalServerErrorException{
 		this.toDoValidator.editValidator(editToDo);
 		toDoService.updateToDo(editToDo);
-		return new ResponseEntity<>("updated successfully", HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	@PutMapping("/status/{id}")//tested with postman
 	public ResponseEntity<?> changeToDoStatus(@PathVariable("id") long id) throws BadRequestException, NotFoundException, InternalServerErrorException{
 		this.toDoValidator.changeStatusValidator(id);
 		toDoService.changeStatus(id);
-		return new ResponseEntity<>("updated successfully", HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 }

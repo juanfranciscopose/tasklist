@@ -39,7 +39,7 @@ public class UserController {
 	public ResponseEntity<?> createUser(@RequestBody UserRequest user) throws UnprocessableEntityException, InternalServerErrorException, NotFoundException{
 		userValidator.createValidator(user);
 		userService.storeUser(user);
-		return new ResponseEntity<>("created successfully", HttpStatus.CREATED);
+		return new ResponseEntity<>(HttpStatus.CREATED);
 	}
 	
 	@PreAuthorize("hasAuthority('ROL_ADMIN')")
@@ -47,7 +47,7 @@ public class UserController {
 	public ResponseEntity<?> removeUser(@PathVariable("id") long id) throws BadRequestException, InternalServerErrorException, NotFoundException{
 		userValidator.removeValidator(id);
 		userService.deleteUser(id);
-		return new ResponseEntity<>("deleted successfully", HttpStatus.OK);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
 	//return all task for a given user
