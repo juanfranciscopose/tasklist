@@ -18,6 +18,7 @@ import com.tasklist.model.User;
 @SuppressWarnings("serial")
 public class MainUser implements UserDetails{
 
+	private long id;
 	private String email;
 	private String name;
 	private String surname;
@@ -29,12 +30,13 @@ public class MainUser implements UserDetails{
 		List<GrantedAuthority> authorities = 
 				user.getRols().stream().map(rol -> new SimpleGrantedAuthority(rol.getRol().name()))
 																		.collect(Collectors.toList());
-		return new MainUser(user.getEmail(), user.getName(), user.getSurname(), user.getPassword()
+		return new MainUser(user.getId(), user.getEmail(), user.getName(), user.getSurname(), user.getPassword()
 				, user.getTelephone(), authorities);
 	}
 	
-	public MainUser(String email, String name, String surname, String password, long telephone,
+	public MainUser(long id, String email, String name, String surname, String password, long telephone,
 			Collection<? extends GrantedAuthority> authority) {
+		this.id = id;
 		this.email = email;
 		this.name = name;
 		this.surname = surname;
@@ -100,6 +102,14 @@ public class MainUser implements UserDetails{
 
 	public void setTelephone(long telephone) {
 		this.telephone = telephone;
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
 	}
 	
 

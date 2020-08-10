@@ -5,14 +5,16 @@ import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 
 public class Credential {
+	private long userId;
 	private String token;
 	private String bearer;
 	private String username;
 	private Collection<? extends GrantedAuthority> authorities;
 	
 	
-	public Credential(String token, String username, Collection<? extends GrantedAuthority> authorities) {
+	public Credential(long id, String token, String username, Collection<? extends GrantedAuthority> authorities) {
 		super();
+		this.setUserId(id);
 		this.token = token;
 		this.username = username;
 		this.bearer = "Bearer";
@@ -42,5 +44,13 @@ public class Credential {
 	}
 	public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
 		this.authorities = authorities;
+	}
+
+	public long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(long userId) {
+		this.userId = userId;
 	}
 }

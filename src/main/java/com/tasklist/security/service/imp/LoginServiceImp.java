@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.tasklist.security.dto.Credential;
 import com.tasklist.security.dto.LoginRequest;
 import com.tasklist.security.jwt.JwtProvider;
+import com.tasklist.security.model.MainUser;
 import com.tasklist.security.service.LoginService;
 
 @Service
@@ -27,8 +28,8 @@ public class LoginServiceImp implements LoginService{
 		Authentication auth = authManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(auth);
 		String token = jwtProvider.generateToken(auth);
-		UserDetails userDetails = (UserDetails) auth.getPrincipal();
-		return new Credential(token, userDetails.getUsername(), userDetails.getAuthorities());
+		MainUser mainUser = (MainUser) auth.getPrincipal();
+		return new Credential(mainUser.getId(), token, mainUser.getUsername(), mainUser.getAuthorities());
 	}
 
 }
