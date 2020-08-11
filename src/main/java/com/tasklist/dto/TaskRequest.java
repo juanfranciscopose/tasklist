@@ -10,7 +10,7 @@ public class TaskRequest {
 	private Date timeStamp;
 	private UserRequest author;
 	private boolean status;
-	private List<ToDoRequest> toDo;
+	private List<ToDoRequest> toDoList;
 	
 	public TaskRequest() {}
 	
@@ -21,7 +21,7 @@ public class TaskRequest {
 		this.timeStamp = timeStamp;
 		this.status = status;
 		this.author = author;
-		this.toDo = toDo;
+		this.toDoList = toDo;
 	}
 	
 	public long getId() {
@@ -62,10 +62,10 @@ public class TaskRequest {
 	}
 
 	public List<ToDoRequest> getToDo() {
-		return toDo;
+		return toDoList;
 	}
 
 	public void setToDo(List<ToDoRequest> toDo) {
-		this.toDo = toDo;
+		this.toDoList = toDo;
 	}
 }
