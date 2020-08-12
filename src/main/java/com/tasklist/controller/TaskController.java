@@ -25,8 +25,8 @@ import com.tasklist.util.exception.UnprocessableEntityException;
 import com.tasklist.util.validator.TaskValidator;
 
 @RestController
-@RequestMapping(path="/tasks")
 @CrossOrigin
+@RequestMapping(path="/tasks")
 public class TaskController {
 	
 	@Autowired
@@ -76,4 +76,10 @@ public class TaskController {
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);//204
 	}
 	
+	@GetMapping("/{task_id}/")
+	public ResponseEntity<TaskRequest> getTask(@PathVariable("task_id") long taskId) throws NotFoundException, InternalServerErrorException, BadRequestException {	
+		this.taskValidator.getTaskValidator(taskId);
+		TaskRequest task = taskService.getTask(taskId);
+		return new ResponseEntity<TaskRequest>(task, HttpStatus.OK);
+	}
 }

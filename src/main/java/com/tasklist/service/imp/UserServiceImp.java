@@ -1,6 +1,7 @@
 package com.tasklist.service.imp;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -12,10 +13,10 @@ import org.springframework.stereotype.Service;
 
 import com.tasklist.dao.UserRepository;
 import com.tasklist.dto.TaskRequest;
-import com.tasklist.dto.ToDoRequest;
+//import com.tasklist.dto.ToDoRequest;
 import com.tasklist.dto.UserRequest;
 import com.tasklist.model.Task;
-import com.tasklist.model.ToDo;
+//import com.tasklist.model.ToDo;
 import com.tasklist.model.User;
 import com.tasklist.security.enums.RolName;
 import com.tasklist.security.model.Rol;
@@ -77,15 +78,18 @@ public class UserServiceImp implements UserService{
 		try {
 			List<Task> taskList = getUserById(id).getTasks();
 			for (Task task : taskList) {
+				/*
 				List<ToDoRequest> toDoListResult = new ArrayList<>();
 				for (ToDo toDo : task.getList()) {
 					ToDoRequest toDoRequest = new ToDoRequest(toDo.getId(), toDo.getDescription(), toDo.getTimeStamp(), null, toDo.isStatus());
 					toDoListResult.add(toDoRequest);
-				}				
+				}
+				*/
 				TaskRequest taskRequest = new TaskRequest(task.getId(), task.getTitle(), task.getDescription(), task.getTimeStamp(), 
-									 task.isStatus(), null, toDoListResult);
+									 task.isStatus(), null, null);
 				taskListResult.add(taskRequest);
 			}
+			Collections.sort(taskListResult);
 			return taskListResult;
 		}catch (Exception e) {
 			throw new InternalServerErrorException(e.toString());

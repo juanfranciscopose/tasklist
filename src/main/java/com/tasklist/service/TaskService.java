@@ -21,4 +21,6 @@ public interface TaskService {
 	public void updateTask(TaskRequest taskRequest) throws InternalServerErrorException;
 	//return list of 'to do' object
 	public List<ToDoRequest> getAllToDo(long taskId) throws InternalServerErrorException;
+	//return taskRequest
+	public TaskRequest getTask(long taskId) throws InternalServerErrorException;
 }

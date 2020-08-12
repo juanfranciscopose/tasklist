@@ -3,7 +3,7 @@ package com.tasklist.dto;
 import java.util.Date;
 import java.util.List;
 
-public class TaskRequest {
+public class TaskRequest implements Comparable<TaskRequest>{
 	private long id;
 	private String title;
 	private String description;
@@ -68,4 +68,11 @@ public class TaskRequest {
 	public void setToDo(List<ToDoRequest> toDo) {
 		this.toDoList = toDo;
 	}
+
+	@Override
+	//sort: MAX id first
+	public int compareTo(TaskRequest o) {
+	    return Long.compare(o.getId(), this.getId());
+	}
+	
 }

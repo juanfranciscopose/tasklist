@@ -1,6 +1,7 @@
 package com.tasklist.service.imp;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -41,6 +42,7 @@ public class TaskServiceImp implements TaskService {
 									 task.isStatus(), userRequest, null);
 				taskListResult.add(taskRequest);
 			}
+			Collections.sort(taskListResult);
 			return taskListResult;
 		} catch (Exception e) {
 			throw new InternalServerErrorException(e.toString());
@@ -113,6 +115,22 @@ public class TaskServiceImp implements TaskService {
 				toDoListResult.add(toDoRequest);
 			}
 			return toDoListResult;
+		} catch (Exception e) {
+			throw new InternalServerErrorException(e.toString());
+		}
+	}
+
+	@Override
+	public TaskRequest getTask(long taskId) throws InternalServerErrorException {
+		try {
+			Task task = this.getTaskById(taskId);
+			List<ToDoRequest> toDoListResult = new ArrayList<>();
+			for (ToDo toDo : task.getList()) {
+				ToDoRequest toDoRequest = new ToDoRequest(toDo.getId(), toDo.getDescription(), toDo.getTimeStamp(), null, toDo.isStatus());
+				toDoListResult.add(toDoRequest);
+			}
+			TaskRequest taskRequest = new TaskRequest(taskId, task.getTitle(), task.getDescription(), task.getTimeStamp(), task.isStatus(), null, toDoListResult); 
+			return taskRequest;
 		} catch (Exception e) {
 			throw new InternalServerErrorException(e.toString());
 		}

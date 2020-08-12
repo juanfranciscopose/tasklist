@@ -47,7 +47,7 @@ public class TaskValidatorImp implements TaskValidator{
 		if(taskRequest.getTitle().length() > 100 ) {
 			throw new UnprocessableEntityException("the title is very long. Max 100 characters");
 		}
-		if(taskRequest.getDescription().length() > 255) {
+		if(taskRequest.getDescription() != null && taskRequest.getDescription().length() > 255) {
 			throw new UnprocessableEntityException("the description is very long. Max 255 characters");
 		}
 	}
@@ -88,6 +88,11 @@ public class TaskValidatorImp implements TaskValidator{
 
 	@Override
 	public void getAllTaskToDoValidator(long taskId) throws NotFoundException, BadRequestException {
+		this.idValidator(taskId);	
+	}
+
+	@Override
+	public void getTaskValidator(long taskId) throws BadRequestException, NotFoundException {
 		this.idValidator(taskId);	
 	}
 
