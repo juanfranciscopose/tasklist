@@ -11,5 +11,6 @@ import com.tasklist.model.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 	public Optional<User> findByEmailAndPassword(String email, String password);
 	public Optional<User> findByEmail(String email);
+	public Optional<User> findDistinctById(long id);
 	public boolean existsByEmail(String email);
 }

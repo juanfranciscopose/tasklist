@@ -62,7 +62,7 @@ public class UserServiceImp implements UserService{
 	@Override
 	public User getUserById(long id) throws NotFoundException, InternalServerErrorException {
 		try {
-			User user = userRepository.findById(id).get();
+			User user = userRepository.findDistinctById(id).get();
 	        return user;	
 		} catch (NoSuchElementException  e) {
 			throw new NotFoundException("user with id "+id+" not exist");
@@ -77,14 +77,15 @@ public class UserServiceImp implements UserService{
 		List<TaskRequest> taskListResult = new ArrayList<>();
 		try {
 			List<Task> taskList = getUserById(id).getTasks();
+			
 			for (Task task : taskList) {
-				/*
-				List<ToDoRequest> toDoListResult = new ArrayList<>();
-				for (ToDo toDo : task.getList()) {
+				
+				/*	List<ToDoRequest> toDoListResult = new ArrayList<>();
+				for (ToDo toDo : task.getList()) {00
 					ToDoRequest toDoRequest = new ToDoRequest(toDo.getId(), toDo.getDescription(), toDo.getTimeStamp(), null, toDo.isStatus());
 					toDoListResult.add(toDoRequest);
-				}
-				*/
+				}*/
+				
 				TaskRequest taskRequest = new TaskRequest(task.getId(), task.getTitle(), task.getDescription(), task.getTimeStamp(), 
 									 task.isStatus(), null, null);
 				taskListResult.add(taskRequest);

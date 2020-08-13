@@ -76,7 +76,7 @@ public class TaskController {
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);//204
 	}
 	
-	@GetMapping("/{task_id}/")
+	@GetMapping("/{task_id}")
 	public ResponseEntity<TaskRequest> getTask(@PathVariable("task_id") long taskId) throws NotFoundException, InternalServerErrorException, BadRequestException {	
 		this.taskValidator.getTaskValidator(taskId);
 		TaskRequest task = taskService.getTask(taskId);
