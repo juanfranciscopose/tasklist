@@ -81,7 +81,7 @@ public class TaskServiceImp implements TaskService {
 	public void deleteTask(long id) throws InternalServerErrorException, NotFoundException {
 		try {
 			Task task = this.getTaskById(id);
-			User user = userRepository.findById(task.getAuthor().getId()).get();
+			User user = userRepository.findDistinctById(task.getAuthor().getId()).get();
 			user.removeTask(task);
 			userRepository.save(user);
 		} catch (NoSuchElementException  e) {
