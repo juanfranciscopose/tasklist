@@ -22,33 +22,33 @@ public class TaskValidatorImp implements TaskValidator{
 	
 	private void idValidator(long id) throws BadRequestException, NotFoundException {
 		if(id == 0) {
-			throw new BadRequestException("id can't be 0");
+			throw new BadRequestException("El ID no puede ser cero");
 		}
 		if(!isTaskExist(id)) {
-			throw new NotFoundException("user with id "+id+" not exist");	
+			throw new NotFoundException("El proyecto con id: "+id+" no existe");	
 		}
 	}
 	
 	private void createAndUpdateCommonFieldsValidator(TaskRequest taskRequest) throws UnprocessableEntityException {
 		//Required
 		if(taskRequest.getTitle() == null || taskRequest.getTitle().isEmpty()) {
-			throw new UnprocessableEntityException("title is required");
+			throw new UnprocessableEntityException("El titulo es obligatorio");
 		}
 		if(taskRequest.getAuthor().getId() == 0) {
-			throw new UnprocessableEntityException("id can't be 0");
+			throw new UnprocessableEntityException("El id no puede ser cero");
 		}
 		
 		// min fields
 		if(taskRequest.getTitle().length() < 3 ) {
-			throw new UnprocessableEntityException("the title is very short. Min 3 characters");
+			throw new UnprocessableEntityException("El título es muy corto. Min 3 letras");
 		}
 				 
 		//max fields
 		if(taskRequest.getTitle().length() > 100 ) {
-			throw new UnprocessableEntityException("the title is very long. Max 100 characters");
+			throw new UnprocessableEntityException("El título es muy largo. Max 100 letras");
 		}
 		if(taskRequest.getDescription() != null && taskRequest.getDescription().length() > 255) {
-			throw new UnprocessableEntityException("the description is very long. Max 255 characters");
+			throw new UnprocessableEntityException("La descripción es muy larga. Max 255 letras");
 		}
 	}
 	
@@ -63,7 +63,7 @@ public class TaskValidatorImp implements TaskValidator{
 		
 		//user exist
 		if (! userValidator.isUserExist(taskRequest.getAuthor().getId())) {
-			throw new NotFoundException("user (author) with id '"+ taskRequest.getAuthor().getId() +"' not exist");	
+			throw new NotFoundException("El autor con id: '"+ taskRequest.getAuthor().getId() +"' no existe");	
 		}
 
 	}
@@ -82,7 +82,7 @@ public class TaskValidatorImp implements TaskValidator{
 				
 		//task exist
 		if (! isTaskExist(taskRequest.getId())) {
-			throw new NotFoundException("task with id '"+ taskRequest.getId() +"' not exist");	
+			throw new NotFoundException("El proyecto con id: '"+ taskRequest.getId() +"' no existe");	
 		}
 	}
 

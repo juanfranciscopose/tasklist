@@ -13,18 +13,18 @@ public class LoginValidatorImp  implements LoginValidator{
 	public void loginValidator(LoginRequest loginRequest) throws UnprocessableEntityException {
 		//required
 		if(loginRequest.getUsername() == null || loginRequest.getUsername().isEmpty() || loginRequest.getUsername().equals(" ")) {
-			throw new UnprocessableEntityException("Username is required");
+			throw new UnprocessableEntityException("El nombre de usuario es obligatorio");
 		}
 		if(loginRequest.getPassword() == null || loginRequest.getPassword().isEmpty() || loginRequest.getPassword().equals(" ")) {
-			throw new UnprocessableEntityException("password is required");
+			throw new UnprocessableEntityException("La contraseña es obligatoria");
 		}
 		//min field
 		if(loginRequest.getUsername().length() < 3 ) {
-			throw new UnprocessableEntityException("the Username is very short");
+			throw new UnprocessableEntityException("El nombre de usuario es muy corto");
 		}
 		//username correct
 		if(!loginRequest.getUsername().contains("@")) {
-			throw new UnprocessableEntityException("the email is wrong");
+			throw new UnprocessableEntityException("El email es incorrecto");
 		}
 		
 	}

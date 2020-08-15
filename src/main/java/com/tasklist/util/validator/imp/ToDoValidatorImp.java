@@ -20,10 +20,10 @@ public class ToDoValidatorImp implements ToDoValidator{
 
 	private void idValidator(long id) throws BadRequestException, NotFoundException {
 		if(id == 0) {
-			throw new BadRequestException("id can't be 0");
+			throw new BadRequestException("El ID no puede ser cero");
 		}
 		if(!isToDoExist(id)) {
-			throw new NotFoundException("'to do' with id "+id+" not exist");	
+			throw new NotFoundException("El item con id: "+id+" no existe");	
 		}
 	}
 	
@@ -35,15 +35,15 @@ public class ToDoValidatorImp implements ToDoValidator{
 	private void createAndUpdateCommonFieldsValidator(ToDoRequest toDoRequest) throws UnprocessableEntityException {
 		//Required
 		if(toDoRequest.getDescription() == null || toDoRequest.getDescription().isEmpty()) {
-			throw new UnprocessableEntityException("description is required");
+			throw new UnprocessableEntityException("La descripción es obligatoria");
 		}
 		//min field
 		if(toDoRequest.getDescription().length() < 3 ) {
-			throw new UnprocessableEntityException("the description is very short. Min 3 characters");
+			throw new UnprocessableEntityException("La descripción es muy corta. Min 3 letras");
 		}
 		//max field
 		if(toDoRequest.getDescription().length() > 255 ) {
-			throw new UnprocessableEntityException("the description is very long. Max 255 characters");
+			throw new UnprocessableEntityException("La descripción es muy larga. Max 255 letras");
 		}	
 	}
 
@@ -52,7 +52,7 @@ public class ToDoValidatorImp implements ToDoValidator{
 		this.createAndUpdateCommonFieldsValidator(toDoRequest);
 		//task exist
 		if (! taskValidator.isTaskExist(toDoRequest.getTask().getId())) {
-			throw new NotFoundException("task with id '"+ toDoRequest.getTask().getId() +"' not exist");	
+			throw new NotFoundException("El proyecto con id: '"+ toDoRequest.getTask().getId() +"' no existe");	
 		}	
 	}
 
