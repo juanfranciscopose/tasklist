@@ -129,7 +129,9 @@ public class TaskServiceImp implements TaskService {
 				ToDoRequest toDoRequest = new ToDoRequest(toDo.getId(), toDo.getDescription(), toDo.getTimeStamp(), null, toDo.isStatus());
 				toDoListResult.add(toDoRequest);
 			}
-			TaskRequest taskRequest = new TaskRequest(taskId, task.getTitle(), task.getDescription(), task.getTimeStamp(), task.isStatus(), null, toDoListResult); 
+			User author = task.getAuthor();
+			UserRequest userRequest = new UserRequest(author.getId(), null, null, null,null , 0);
+			TaskRequest taskRequest = new TaskRequest(taskId, task.getTitle(), task.getDescription(), task.getTimeStamp(), task.isStatus(), userRequest, toDoListResult); 
 			return taskRequest;
 		} catch (Exception e) {
 			throw new InternalServerErrorException(e.toString());

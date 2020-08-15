@@ -8,12 +8,10 @@ public class NotFoundException extends Exception {
 
 	private static final long serialVersionUID = 1L;
 	
-	private static final String DESCRPTION = "The server could not find the requested content";
-	
 	public NotFoundException() {}
 	
 	public NotFoundException(String details) {
-		super("DESCRPTION: "+DESCRPTION + ". "+details);
+		super(details);
 	}
 
 }

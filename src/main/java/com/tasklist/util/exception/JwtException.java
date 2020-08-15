@@ -15,7 +15,7 @@ public class JwtException extends Exception{
 	public JwtException() {}
 	
 	public JwtException(String details) {
-		super("DESCRPTION: "+DESCRPTION + ". "+details);
+		super(details);
 		logger.error("DESCRPTION: "+DESCRPTION + ". "+details);
 	}
 }

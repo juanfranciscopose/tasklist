@@ -8,12 +8,10 @@ public class BadRequestException extends Exception{
 	
 	private static final long serialVersionUID = 1L;
 	
-	private static final String DESCRPTION = "The Url is wrong";
-	
 	public BadRequestException() {}
 	
 	public BadRequestException(String details) {
-		super("DESCRPTION: "+DESCRPTION + ". "+details);
+		super(details);
 	}
 
 }

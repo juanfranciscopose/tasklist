@@ -17,7 +17,7 @@ public class InternalServerErrorException extends Exception{
 	public InternalServerErrorException() {}
 	
 	public InternalServerErrorException(String details) {
-		super("DESCRPTION: "+DESCRPTION + ". "+details);
+		super(details);
 		logger.error("DESCRPTION: "+DESCRPTION + ". "+details);
 		//System.out.println("DESCRPTION: "+DESCRPTION + ". "+details);
 	}
