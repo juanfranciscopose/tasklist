@@ -7,6 +7,6 @@ import com.tasklist.util.exception.NotFoundException;
 
 public interface RolService {
 	public Rol getRolByRolName(RolName rolName)throws NotFoundException, InternalServerErrorException;
-	public void storeRol(RolName rolName)throws InternalServerErrorException;
-	public void deleteRol(RolName rolName)throws NotFoundException, InternalServerErrorException;
+	public void storeRol(Rol rol)throws InternalServerErrorException;
+	public void deleteRol(Rol rol)throws NotFoundException, InternalServerErrorException;
 }
