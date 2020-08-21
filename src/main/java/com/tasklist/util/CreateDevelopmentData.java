@@ -20,18 +20,22 @@ public class CreateDevelopmentData	implements CommandLineRunner{
 	public void run(String... args) throws Exception {
 		/*Rol admin = new Rol(RolName.ROL_ADMIN);
 		Rol user = new Rol(RolName.ROL_USER);
+		rolService.storeRol(admin);
+		rolService.storeRol(user);
+		logger.info("Roles saved in database");
 		User oneAdmin = new User("Admin", "Admin", "admin@gmail.com", "admin123", 0);
+		
 		//encoder pass
 		oneAdmin.setPassword(passwordEncoder.encode(oneAdmin.getPassword()));
 		Set<Rol> roles = new HashSet<>();
 		roles.add(user);
 		roles.add(admin);
 		oneAdmin.setRols(roles);
-		rolService.storeRol(admin);
-		rolService.storeRol(user);
 		userRepository.save(oneAdmin);
+		
 		logger.info("Roles and admin user saved in database");*/
-		logger.warn("Roles and admin user have already been added. They are commented");
+		//logger.warn("Roles and admin user have already been added. They are commented");
+		logger.warn("testing mode: only create roles");
 	}
 
 }

@@ -2,6 +2,9 @@ package com.tasklist.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,11 +15,12 @@ import com.tasklist.dao.UserRepository;
 import com.tasklist.dto.UserRequest;
 import com.tasklist.model.User;
 import com.tasklist.util.exception.InternalServerErrorException;
+import com.tasklist.util.exception.NotFoundException;
 
 @SpringBootTest
 class UserServiceTest {
 	private static final long HASH_RANDOM = 10000;//used to generate a non-existent id
-
+	
 	@Autowired
 	private UserService userService;
 	 
@@ -38,7 +42,7 @@ class UserServiceTest {
 		userRepository.delete(user);
 	}
 	@Test
-	void storeAndDeleteUserTest() {
+	void storeAndDeleteUserTest() throws NotFoundException, InternalServerErrorException {
 		//---- EXCEPTION TESTING ----
 		
 		//--name
@@ -65,6 +69,9 @@ class UserServiceTest {
 		//---RIGHT WAY
 		//create
 		userRequest.setEmail("jhondoe@gmail.com");
+		Set<String> roles = new HashSet<>();
+		roles.add("user");
+		userRequest.setRols(roles);
 		assertDoesNotThrow(() -> userService.storeUser(userRequest));
 		
 		//delete
