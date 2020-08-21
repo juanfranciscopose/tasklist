@@ -1,9 +1,9 @@
 package com.tasklist.service.imp;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,25 +25,21 @@ public class TaskServiceImp implements TaskService {
 
 	@Autowired
 	private TaskRepository taskRepository;
-	
+
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@Override
-	//refactor
 	public List<TaskRequest> getAllPublicTask() throws InternalServerErrorException {
-		List<TaskRequest> taskListResult = new ArrayList<>(); 
 		try {
 			List<Task> taskList = taskRepository.findByStatus(true);
-			for (Task task : taskList) {
-				UserRequest userRequest = new UserRequest(task.getAuthor().getId(), task.getAuthor().getName(), 
-								task.getAuthor().getSurname(), task.getAuthor().getEmail(), null, task.getAuthor().getTelephone());
-				TaskRequest taskRequest = new TaskRequest(task.getId(), task.getTitle(), task.getDescription(), task.getTimeStamp(), 
-									 task.isStatus(), userRequest, null);
-				taskListResult.add(taskRequest);
-			}
-			Collections.sort(taskListResult);
-			return taskListResult;
+			List<TaskRequest> taskRequestList = taskList.stream().map(task -> new TaskRequest(task.getId(),
+					task.getTitle(), task.getDescription(), task.getTimeStamp(), task.isStatus(),
+					new UserRequest(task.getAuthor().getId(), task.getAuthor().getName(), task.getAuthor().getSurname(),
+							task.getAuthor().getEmail(), null, task.getAuthor().getTelephone()),
+					null)).collect(Collectors.toList());
+			Collections.sort(taskRequestList);
+			return taskRequestList;
 		} catch (Exception e) {
 			throw new InternalServerErrorException(e.toString());
 		}
@@ -53,13 +49,13 @@ public class TaskServiceImp implements TaskService {
 	public void storeTask(TaskRequest taskRequest) throws NotFoundException, InternalServerErrorException {
 		try {
 			User user = userRepository.findById(taskRequest.getAuthor().getId()).get();
-			Task task = new Task(taskRequest.getTitle(), taskRequest.getDescription(), 
-							taskRequest.getTimeStamp(), taskRequest.isStatus());
+			Task task = new Task(taskRequest.getTitle(), taskRequest.getDescription(), taskRequest.getTimeStamp(),
+					taskRequest.isStatus());
 			user.addTask(task);
 			userRepository.save(user);
-		} catch (NoSuchElementException  e) {
-			throw new NotFoundException("User (author) with id '"+taskRequest.getAuthor().getId()+"' not exist"); 
-		}catch (Exception e) {
+		} catch (NoSuchElementException e) {
+			throw new NotFoundException("User (author) with id '" + taskRequest.getAuthor().getId() + "' not exist");
+		} catch (Exception e) {
 			throw new InternalServerErrorException(e.toString());
 		}
 	}
@@ -69,23 +65,23 @@ public class TaskServiceImp implements TaskService {
 		try {
 			Task task = taskRepository.findById(id).get();
 			return task;
-		} catch (NoSuchElementException  e) {
-			throw new NotFoundException("task with id '"+id+"' not exist"); 
-		}catch (Exception e) {
+		} catch (NoSuchElementException e) {
+			throw new NotFoundException("task with id '" + id + "' not exist");
+		} catch (Exception e) {
 			throw new InternalServerErrorException(e.toString());
-		}	
+		}
 	}
 
 	@Override
-	//refactor-> no need to search task
+	// refactor-> no need to search task
 	public void deleteTask(long id) throws InternalServerErrorException, NotFoundException {
 		try {
 			Task task = this.getTaskById(id);
 			User user = userRepository.findDistinctById(task.getAuthor().getId()).get();
 			user.removeTask(task);
 			userRepository.save(user);
-		} catch (NoSuchElementException  e) {
-			throw new NotFoundException("user not exist"); 
+		} catch (NoSuchElementException e) {
+			throw new NotFoundException("user not exist");
 		} catch (Exception e) {
 			throw new InternalServerErrorException(e.toString());
 		}
@@ -104,17 +100,22 @@ public class TaskServiceImp implements TaskService {
 		}
 	}
 
+	private List<ToDoRequest> buildToDoRequestList(List<ToDo> toDoList) throws InternalServerErrorException {
+		try {
+			List<ToDoRequest> toDoRequestList = toDoList.stream().map(toDo -> new ToDoRequest(toDo.getId(),
+					toDo.getDescription(), toDo.getTimeStamp(), null, toDo.isStatus())).collect(Collectors.toList());
+			return toDoRequestList;
+		} catch (Exception e) {
+			throw new InternalServerErrorException(e.toString());
+		}
+	}
+	
 	@Override
-	//refactor
 	public List<ToDoRequest> getAllToDo(long taskId) throws InternalServerErrorException {
-		List<ToDoRequest> toDoListResult = new ArrayList<>();
 		try {
 			Task task = this.getTaskById(taskId);
-			for (ToDo toDo : task.getList()) {
-				ToDoRequest toDoRequest = new ToDoRequest(toDo.getId(), toDo.getDescription(), toDo.getTimeStamp(), null, toDo.isStatus());
-				toDoListResult.add(toDoRequest);
-			}
-			return toDoListResult;
+			List<ToDoRequest> toDoRequestList = this.buildToDoRequestList(task.getList());
+			return toDoRequestList;
 		} catch (Exception e) {
 			throw new InternalServerErrorException(e.toString());
 		}
@@ -124,14 +125,12 @@ public class TaskServiceImp implements TaskService {
 	public TaskRequest getTask(long taskId) throws InternalServerErrorException {
 		try {
 			Task task = this.getTaskById(taskId);
-			List<ToDoRequest> toDoListResult = new ArrayList<>();
-			for (ToDo toDo : task.getList()) {
-				ToDoRequest toDoRequest = new ToDoRequest(toDo.getId(), toDo.getDescription(), toDo.getTimeStamp(), null, toDo.isStatus());
-				toDoListResult.add(toDoRequest);
-			}
+			List<ToDoRequest> toDoRequestListResult = this.buildToDoRequestList(task.getList());
+
 			User author = task.getAuthor();
-			UserRequest userRequest = new UserRequest(author.getId(), null, null, null,null , 0);
-			TaskRequest taskRequest = new TaskRequest(taskId, task.getTitle(), task.getDescription(), task.getTimeStamp(), task.isStatus(), userRequest, toDoListResult); 
+			UserRequest userRequest = new UserRequest(author.getId(), null, null, null, null, 0);
+			TaskRequest taskRequest = new TaskRequest(taskId, task.getTitle(), task.getDescription(),
+					task.getTimeStamp(), task.isStatus(), userRequest, toDoRequestListResult);
 			return taskRequest;
 		} catch (Exception e) {
 			throw new InternalServerErrorException(e.toString());

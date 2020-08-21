@@ -17,4 +17,5 @@ public interface UserService {
 	public List<TaskRequest> getAllUserTask(long id) throws InternalServerErrorException;
 	//remove user
 	public void deleteUser(long id) throws InternalServerErrorException;
+	public List<UserRequest> getAllUsers() throws InternalServerErrorException;
 }

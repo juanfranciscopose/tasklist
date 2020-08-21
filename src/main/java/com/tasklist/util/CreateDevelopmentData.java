@@ -1,31 +1,20 @@
 package com.tasklist.util;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import com.tasklist.dao.UserRepository;
-import com.tasklist.model.User;
-import com.tasklist.security.enums.RolName;
-import com.tasklist.security.model.Rol;
-import com.tasklist.security.service.RolService;
-import com.tasklist.util.exception.InternalServerErrorException;
 
 @Component
 public class CreateDevelopmentData	implements CommandLineRunner{
 	private static final Logger logger = LoggerFactory.getLogger(CreateDevelopmentData.class);
-	@Autowired
+	/*@Autowired
 	private RolService rolService;
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
-	private PasswordEncoder passwordEncoder;
+	private PasswordEncoder passwordEncoder;*/
 	
 	@Override
 	public void run(String... args) throws Exception {
@@ -42,7 +31,7 @@ public class CreateDevelopmentData	implements CommandLineRunner{
 		rolService.storeRol(user);
 		userRepository.save(oneAdmin);
 		logger.info("Roles and admin user saved in database");*/
-		logger.warn("Roles and admin user have already been added. They are commented");;
+		logger.warn("Roles and admin user have already been added. They are commented");
 	}
 
 }

@@ -1,11 +1,11 @@
 package com.tasklist.service.imp;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,10 +13,8 @@ import org.springframework.stereotype.Service;
 
 import com.tasklist.dao.UserRepository;
 import com.tasklist.dto.TaskRequest;
-//import com.tasklist.dto.ToDoRequest;
 import com.tasklist.dto.UserRequest;
 import com.tasklist.model.Task;
-//import com.tasklist.model.ToDo;
 import com.tasklist.model.User;
 import com.tasklist.security.enums.RolName;
 import com.tasklist.security.model.Rol;
@@ -72,26 +70,14 @@ public class UserServiceImp implements UserService{
 	}
 
 	@Override
-	//refactor
-	public List<TaskRequest> getAllUserTask(long id) throws InternalServerErrorException {
-		List<TaskRequest> taskListResult = new ArrayList<>();
+	public List<TaskRequest> getAllUserTask(long id) throws InternalServerErrorException {		
 		try {
 			List<Task> taskList = getUserById(id).getTasks();
-			
-			for (Task task : taskList) {
-				
-				/*	List<ToDoRequest> toDoListResult = new ArrayList<>();
-				for (ToDo toDo : task.getList()) {00
-					ToDoRequest toDoRequest = new ToDoRequest(toDo.getId(), toDo.getDescription(), toDo.getTimeStamp(), null, toDo.isStatus());
-					toDoListResult.add(toDoRequest);
-				}*/
-				
-				TaskRequest taskRequest = new TaskRequest(task.getId(), task.getTitle(), task.getDescription(), task.getTimeStamp(), 
-									 task.isStatus(), null, null);
-				taskListResult.add(taskRequest);
-			}
-			Collections.sort(taskListResult);
-			return taskListResult;
+			List<TaskRequest> taskRequestList = taskList.stream().map(task -> new TaskRequest(task.getId(),
+					task.getTitle(), task.getDescription(), task.getTimeStamp(), task.isStatus(), null, null))
+					.collect(Collectors.toList());
+			Collections.sort(taskRequestList);
+			return taskRequestList;
 		}catch (Exception e) {
 			throw new InternalServerErrorException(e.toString());
 		}
@@ -102,6 +88,19 @@ public class UserServiceImp implements UserService{
 		try {
 			User user = getUserById(id);
 			userRepository.delete(user);
+		} catch (Exception e) {
+			throw new InternalServerErrorException(e.toString());
+		}
+	}
+
+	@Override
+	public List<UserRequest> getAllUsers() throws InternalServerErrorException {
+		try {
+			List<User> userList = this.userRepository.findAll();
+			List<UserRequest> userRequestList = userList.stream().map(user -> new UserRequest(user.getId(), 
+					user.getName(), user.getSurname(), user.getEmail(), null, user.getTelephone()))
+					.collect(Collectors.toList());
+			return userRequestList;
 		} catch (Exception e) {
 			throw new InternalServerErrorException(e.toString());
 		}

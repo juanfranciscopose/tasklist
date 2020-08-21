@@ -60,4 +60,13 @@ public class UserController {
 		}
 		return new ResponseEntity<>(HttpStatus.NO_CONTENT);//204
 	}
+	
+	@GetMapping("/users")
+	public ResponseEntity<List<UserRequest>> getAllUsers() throws InternalServerErrorException {
+		List<UserRequest> list = userService.getAllUsers();
+		if(! list.isEmpty()) {
+			return new ResponseEntity<List<UserRequest>>(list, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.NO_CONTENT);//204
+	}
 }
