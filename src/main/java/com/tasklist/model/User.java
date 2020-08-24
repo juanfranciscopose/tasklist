@@ -18,7 +18,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.tasklist.security.model.Rol;
+import com.tasklist.security.model.Role;
 
 
 /*
@@ -53,9 +53,9 @@ public class User {
 	private List<Task> tasks;
 	
 	@ManyToMany(fetch = FetchType.EAGER)
-	@JoinTable(name = "user_rol", joinColumns = @JoinColumn(name="user_id"), 
-				inverseJoinColumns = @JoinColumn(name= "rol_id"))
-	private Set<Rol> rols;
+	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name="user_id"), 
+				inverseJoinColumns = @JoinColumn(name= "role_id"))
+	private Set<Role> roles;
 	
 	public User() {}
 
@@ -66,7 +66,7 @@ public class User {
 		this.password = password;
 		this.telephone = telephone;
 		this.tasks = new ArrayList<Task>();
-		this.rols = new HashSet<Rol>();
+		this.roles = new HashSet<Role>();
 	}
 
 	public long getId() {
@@ -134,12 +134,12 @@ public class User {
 		task.setAuthor(null);
 	}
 
-	public Set<Rol> getRols() {
-		return rols;
+	public Set<Role> getRoles() {
+		return roles;
 	}
 
-	public void setRols(Set<Rol> rols) {
-		this.rols = rols;
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
 	}
 
 	@Override
@@ -170,6 +170,6 @@ public class User {
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", name=" + name + ", surname=" + surname + ", email=" + email + ", password="
-				+ password + ", telephone=" + telephone + ", tasks=" + tasks + ", rols=" + rols + "]";
+				+ password + ", telephone=" + telephone + ", tasks=" + tasks + ", roles=" + roles + "]";
 	}
 }

@@ -20,7 +20,7 @@ import com.tasklist.security.service.imp.MainUserServiceImp;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)//for Admin rol
+@EnableGlobalMethodSecurity(prePostEnabled = true)//for Admin role
 public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	@Autowired
 	private MainUserServiceImp mainUserService;

@@ -10,7 +10,7 @@ public class UserRequest {
 	private String email;
 	private String password;
 	private long telephone;
-	private Set<String> rols;
+	private Set<String> roles;
 	
 	public UserRequest() {}
 	
@@ -21,7 +21,7 @@ public class UserRequest {
 		this.email = email;
 		this.password = password;
 		this.telephone = telephone;
-		this.rols = new HashSet<String>();
+		this.roles = new HashSet<String>();
 	}
 
 	public long getId() {
@@ -61,12 +61,12 @@ public class UserRequest {
 		this.telephone = telephone;
 	}
 
-	public Set<String> getRols() {
-		return rols;
+	public Set<String> getRoles() {
+		return roles;
 	}
 
-	public void setRols(Set<String> rols) {
-		this.rols = rols;
+	public void setRoles(Set<String> roles) {
+		this.roles = roles;
 	}
 	
 	

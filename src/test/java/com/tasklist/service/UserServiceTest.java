@@ -71,7 +71,7 @@ class UserServiceTest {
 		userRequest.setEmail("jhondoe@gmail.com");
 		Set<String> roles = new HashSet<>();
 		roles.add("user");
-		userRequest.setRols(roles);
+		userRequest.setRoles(roles);
 		assertDoesNotThrow(() -> userService.storeUser(userRequest));
 		
 		//delete

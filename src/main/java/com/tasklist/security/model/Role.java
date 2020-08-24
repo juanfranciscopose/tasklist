@@ -9,11 +9,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import com.tasklist.security.enums.RolName;
+import com.tasklist.security.enums.RoleName;
 
 @Entity
-@Table(name="rols")
-public class Rol {
+@Table(name="roles")
+public class Role {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,13 +21,13 @@ public class Rol {
 	private int id;
 	
 	@Enumerated(EnumType.STRING)
-	@Column(name="rol", nullable = false)
-	private RolName rol;
+	@Column(name="role", nullable = false)
+	private RoleName role;
 
-	public Rol() {}
+	public Role() {}
 	
-	public Rol(RolName rol) {
-		this.rol = rol;
+	public Role(RoleName role) {
+		this.role = role;
 	}
 
 	public int getId() {
@@ -38,11 +38,11 @@ public class Rol {
 		this.id = id;
 	}
 
-	public RolName getRol() {
-		return rol;
+	public RoleName getRole() {
+		return role;
 	}
 
-	public void setRol(RolName rol) {
-		this.rol = rol;
+	public void setRole(RoleName role) {
+		this.role = role;
 	}
 }

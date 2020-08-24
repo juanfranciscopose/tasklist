@@ -16,9 +16,9 @@ import com.tasklist.dto.TaskRequest;
 import com.tasklist.dto.UserRequest;
 import com.tasklist.model.Task;
 import com.tasklist.model.User;
-import com.tasklist.security.enums.RolName;
-import com.tasklist.security.model.Rol;
-import com.tasklist.security.service.RolService;
+import com.tasklist.security.enums.RoleName;
+import com.tasklist.security.model.Role;
+import com.tasklist.security.service.RoleService;
 import com.tasklist.service.UserService;
 import com.tasklist.util.exception.InternalServerErrorException;
 import com.tasklist.util.exception.NotFoundException;
@@ -30,7 +30,7 @@ public class UserServiceImp implements UserService{
 	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
-	private RolService rolService;
+	private RoleService roleService;
 	
 	@Autowired
 	private UserRepository userRepository;
@@ -43,13 +43,13 @@ public class UserServiceImp implements UserService{
 					userRequest.getPassword(), userRequest.getTelephone());
 			//encoder pass
 			user.setPassword(passwordEncoder.encode(user.getPassword()));
-			//set rols
-			Set<Rol> rols = new HashSet<>();
-			rols.add(rolService.getRolByRolName(RolName.ROL_USER));
-			if (userRequest.getRols() != null && userRequest.getRols().contains("admin")) {
-				rols.add(rolService.getRolByRolName(RolName.ROL_ADMIN));
+			//set roles
+			Set<Role> roles = new HashSet<>();
+			roles.add(roleService.getRoleByRoleName(RoleName.ROLE_USER));
+			if (userRequest.getRoles() != null && userRequest.getRoles().contains("admin")) {
+				roles.add(roleService.getRoleByRoleName(RoleName.ROLE_ADMIN));
 			}
-			user.setRols(rols);
+			user.setRoles(roles);
             
 			userRepository.save(user);
        } catch (Exception e) {
